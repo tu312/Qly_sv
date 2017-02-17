@@ -139,32 +139,37 @@ public class PartnerInfoService {
     }
 
     //change Logo
-    public void changeLogo (PartnerInfoDTO partnerInfoDTO, String token) throws IOException {
+    public void changeLogo(int partnerId, PartnerInfoDTO partnerInfoDTO, String token) throws IOException {
         User user = userRepository.findByToken(token);
-        Partner partner = user.getPartner();
-        String username = user.getUserName();
-        PartnerInfo partnerInfo = partner.getPartnerInfo();
-        //code đổi tên image thành partner_id.jpg và save vào database
-        String pathname = "../Qly_SV_client/app/users_data/partner/" + username;
-        File directory = new File(pathname);
-        if (! directory.exists()) {
-            directory.mkdir();
-        }
+        Partner partner = partnerRepository.findById(partnerId);
+        if (user.getPartner().equals(partner)) {
+            String username = user.getUserName();
+            PartnerInfo partnerInfo = partner.getPartnerInfo();
+            //code đổi tên image thành partner_id.jpg và save vào database
+            String pathname = "../Qly_SV_client/app/users_data/partner/" + username;
+            File directory = new File(pathname);
+            if (! directory.exists()) {
+                directory.mkdir();
+            }
 //        directory.delete();
-        pathname = "../Qly_SV_client/app/users_data/partner/" + username + "/logo/";
-        String directoryName = "users_data/partner/" + username + "/logo/";
-        String fileName = username + "_logo.jpg";
-        directory = new File(pathname);
-        if (! directory.exists()) {
-            directory.mkdir();
+            pathname = "../Qly_SV_client/app/users_data/partner/" + username + "/logo/";
+            String directoryName = "users_data/partner/" + username + "/logo/";
+            String fileName = username + "_logo.jpg";
+            directory = new File(pathname);
+            if (! directory.exists()) {
+                directory.mkdir();
+            }
+            byte[] btDataFile = new sun.misc.BASE64Decoder().decodeBuffer(partnerInfoDTO.getLogo());
+            File of = new File( pathname + fileName);
+            FileOutputStream osf = new FileOutputStream(of);
+            osf.write(btDataFile);
+            osf.flush();
+            partnerInfo.setLogo("http://localhost:8000/" + directoryName + username + "_logo.jpg");
+            partnerInfoRepository.save(partnerInfo);
+        } else{
+            throw new NullPointerException("User doesn't match with Partner.");
         }
-        byte[] btDataFile = new sun.misc.BASE64Decoder().decodeBuffer(partnerInfoDTO.getLogo());
-        File of = new File( pathname + fileName);
-        FileOutputStream osf = new FileOutputStream(of);
-        osf.write(btDataFile);
-        osf.flush();
-        partnerInfo.setLogo("http://localhost:8000/" + directoryName + username + "_logo.jpg");
-        partnerInfoRepository.save(partnerInfo);
+
     }
 
     //get partner vip logo
