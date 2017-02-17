@@ -2,10 +2,15 @@ package uet.usercontroller.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uet.usercontroller.DTO.CommentDTO;
 import uet.usercontroller.model.Comment;
 import uet.usercontroller.model.Partner;
+import uet.usercontroller.model.Student;
+import uet.usercontroller.model.User;
 import uet.usercontroller.repository.CommentRepository;
 import uet.usercontroller.repository.PartnerRepository;
+import uet.usercontroller.repository.StudentRepository;
+import uet.usercontroller.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +25,10 @@ public class CommentService {
     private CommentRepository commentRepository;
     @Autowired
     PartnerRepository partnerRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    StudentRepository studentRepository;
 
     //show all comments
     public List<HashMap<String, String>> showAllComment(){
@@ -46,6 +55,26 @@ public class CommentService {
     public List<Comment> showAllCommentOfOnePartner(int id){
         Partner partner = partnerRepository.findOne(id);
         return partner.getComments();
+    }
+
+    //write a comment
+    public Comment writeComment(int studentId, int partnerId, CommentDTO commentDTO, String token){
+        User user = userRepository.findByToken(token);
+        Student student = user.getStudent();
+        if (student.getId() ==  studentId){
+            if (student.getComment() == null ){
+                Comment comment = new Comment();
+                comment.setContent(commentDTO.getContent());
+                comment.setRating(commentDTO.getRating());
+                comment.setPartnerId(partnerId);
+                commentRepository.save(comment);
+                return comment;
+            } else {
+                throw new NullPointerException("This user has already commented for this partner.");
+            }
+        } else {
+            throw new NullPointerException("Error");
+        }
     }
 }
 

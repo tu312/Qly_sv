@@ -1,15 +1,14 @@
 package uet.usercontroller.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import uet.usercontroller.DTO.CommentDTO;
 import uet.usercontroller.model.Comment;
 import uet.usercontroller.model.Role;
 import uet.usercontroller.service.CommentService;
 import uet.usercontroller.stereotype.RequiredRoles;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,5 +32,14 @@ public class CommentController {
     @RequestMapping(value="/showAllCommentOfOnePartner/{partnerId}", method = RequestMethod.GET)
     public List<Comment> showAllCommentOfOnePartner(@PathVariable("partnerId") int partnerId) {
         return commentService.showAllCommentOfOnePartner(partnerId);
+    }
+
+    //comment a partner
+    @RequiredRoles({Role.STUDENT})
+    @RequestMapping(value="student/{studentId}/writeComment/partner{partnerId}", method = RequestMethod.POST)
+    public Comment writeComment(@PathVariable("studentId") int studentId, @PathVariable("partnerId") int partnerId,
+                                @RequestBody CommentDTO commentDTO, HttpServletRequest request){
+        String token = request.getHeader("auth-token");
+        return commentService.writeComment(studentId, partnerId, commentDTO, token);
     }
 }

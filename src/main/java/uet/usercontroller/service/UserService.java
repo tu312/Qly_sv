@@ -80,7 +80,7 @@ public class UserService {
                 user.setPassword(userDTO.getPassword());
                 user.setRole(userDTO.getRole());
                 user.setStatus("A");
-                if (user.getRole() == Role.VIP_PARTNER) {
+                if (user.getRole() == Role.VIP_PARTNER || user.getRole() == Role.NORMAL_PARTNER) {
                     Partner partner = new Partner();
                     user.setPartner(partner);
 
