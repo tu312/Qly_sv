@@ -30,7 +30,7 @@ public class FollowController {
         return followService.showAllFollowsOfStudent(studentId, token);
     }
 
-    // show all follows of post
+    // show all follows of post 
     @RequiredRoles({Role.STUDENT, Role.VIP_PARTNER,Role.ADMIN})
     @RequestMapping(value="post/{postId}/follow",method = RequestMethod.GET)
     public List<Follow> showAllFollowsOfPost(@PathVariable("postId") int postId, HttpServletRequest request){
