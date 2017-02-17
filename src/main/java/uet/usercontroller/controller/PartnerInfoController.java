@@ -38,7 +38,8 @@ public class PartnerInfoController {
     //create a partner info
     @RequiredRoles(Role.VIP_PARTNER)
     @RequestMapping(value="partner/{partnerId}/partnerInfo", method = RequestMethod.POST)
-    public PartnerInfo createInfo(@PathVariable("partnerId") int partnerId, @RequestBody PartnerInfoDTO partnerInfoDTO, HttpServletRequest request){
+    public PartnerInfo createInfo(@PathVariable("partnerId") int partnerId, @RequestBody PartnerInfoDTO partnerInfoDTO,
+                                  HttpServletRequest request){
         String token = request.getHeader("auth-token");
         return partnerInfoService.createInfo(partnerId, partnerInfoDTO, token);
     }
@@ -46,17 +47,19 @@ public class PartnerInfoController {
     //edit info of a partner
     @RequiredRoles({Role.VIP_PARTNER, Role.NORMAL_PARTNER})
     @RequestMapping(value="partnerInfo/{partnerInfoId}", method = RequestMethod.PUT)
-    public PartnerInfo editInfo(@PathVariable("partnerInfoId") int partnerInfoId, @RequestBody PartnerInfoDTO partnerInfoDTO, HttpServletRequest request){
+    public PartnerInfo editInfo(@PathVariable("partnerInfoId") int partnerInfoId, @RequestBody PartnerInfoDTO partnerInfoDTO,
+                                HttpServletRequest request){
         String token = request.getHeader("auth-token");
         return partnerInfoService.editInfo(partnerInfoId, partnerInfoDTO, token);
     }
 
     //change logo
     @RequiredRoles({Role.VIP_PARTNER, Role.NORMAL_PARTNER})
-    @RequestMapping(value="changeLogo", method = RequestMethod.PUT)
-    public void changeLogo(@RequestBody PartnerInfoDTO partnerInfoDTO, HttpServletRequest request) throws IOException {
+    @RequestMapping(value="partner/{partnerId}/changeLogo", method = RequestMethod.PUT)
+    public void changeLogo(@PathVariable("partnerId") int partnerId, @RequestBody PartnerInfoDTO partnerInfoDTO,
+                           HttpServletRequest request) throws IOException {
         String token = request.getHeader("auth-token");
-        partnerInfoService.changeLogo(partnerInfoDTO, token);
+        partnerInfoService.changeLogo(partnerId, partnerInfoDTO, token);
     }
 
     //get partner vip logo
@@ -69,7 +72,8 @@ public class PartnerInfoController {
     //delete info of a partner
     @RequiredRoles({Role.ADMIN,Role.VIP_PARTNER, Role.NORMAL_PARTNER})
     @RequestMapping(value="partner/{partnerId}/partnerInfo", method = RequestMethod.DELETE)
-    public PartnerInfo deleteInfo(@PathVariable("partnerId") int partnerId, @RequestBody PartnerInfoDTO partnerInfoDTO, HttpServletRequest request){
+    public PartnerInfo deleteInfo(@PathVariable("partnerId") int partnerId, @RequestBody PartnerInfoDTO partnerInfoDTO,
+                                  HttpServletRequest request){
         String token = request.getHeader("auth-token");
         return partnerInfoService.deleteInfo(partnerId, partnerInfoDTO, token);
     }

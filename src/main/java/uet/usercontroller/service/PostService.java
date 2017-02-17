@@ -4,9 +4,11 @@ package uet.usercontroller.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uet.usercontroller.DTO.PostDTO;
+import uet.usercontroller.model.Follow;
 import uet.usercontroller.model.Partner;
 import uet.usercontroller.model.Post;
 import uet.usercontroller.model.User;
+import uet.usercontroller.repository.FollowRepository;
 import uet.usercontroller.repository.PartnerRepository;
 import uet.usercontroller.repository.PostRepository;
 import uet.usercontroller.repository.UserRepository;
@@ -29,6 +31,9 @@ public class PostService {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private FollowRepository followRepository;
 
     //show all post
     public List<Post> getAllPosts(){
@@ -117,6 +122,10 @@ public class PostService {
         Partner partner = partnerRepository.findByPostId(postId);
         if (user.getPartner().equals(partner)) {
             postRepository.delete(post);
+            List<Follow> listFollow = (List<Follow>) followRepository.findByPostId(post.getId());
+            for (Follow follow : listFollow){
+                followRepository.delete(follow);
+            }
         }
         else {
             throw new NullPointerException("User doesn't match with Partner.");

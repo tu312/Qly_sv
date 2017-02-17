@@ -62,4 +62,11 @@ public class Student {
     public List<JobSkill> getJobSkills() { return jobSkills; }
 
     public void setJobSkills(List<JobSkill> jobSkills) { this.jobSkills = jobSkills; }
+
+    @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL)
+    private List<Follow> follows;
+
+    public List<Follow> getFollows() { return follows; }
+
+    public void setFollows(List<Follow> follows) { this.follows = follows; }
 }
