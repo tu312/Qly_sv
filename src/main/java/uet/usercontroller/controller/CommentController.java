@@ -42,4 +42,5 @@ public class CommentController {
         String token = request.getHeader("auth-token");
         return commentService.writeComment(studentId, partnerId, commentDTO, token);
     }
+
 }
