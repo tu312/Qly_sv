@@ -51,6 +51,7 @@ public class PartnerInfoService {
             String taxCode = partnerInfo.getTaxCode();
             String website = partnerInfo.getWebsite();
             String logo = partnerInfo.getLogo();
+            lPartnerInfo.put("partnerId", String.valueOf(partner.getId()));
             lPartnerInfo.put("userId", userId);
             lPartnerInfo.put("status", status);
             lPartnerInfo.put("partnerInfoId", partnerInfoId);
