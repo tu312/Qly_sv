@@ -72,9 +72,15 @@ public class PartnerInfoController {
     //delete info of a partner
     @RequiredRoles({Role.ADMIN,Role.VIP_PARTNER, Role.NORMAL_PARTNER})
     @RequestMapping(value="partner/{partnerId}/partnerInfo", method = RequestMethod.DELETE)
-    public PartnerInfo deleteInfo(@PathVariable("partnerId") int partnerId, @RequestBody PartnerInfoDTO partnerInfoDTO,
-                                  HttpServletRequest request){
+    public PartnerInfo deleteInfo(@PathVariable("partnerId") int partnerId, HttpServletRequest request){
         String token = request.getHeader("auth-token");
-        return partnerInfoService.deleteInfo(partnerId, partnerInfoDTO, token);
+        return partnerInfoService.deleteInfo(partnerId, token);
+    }
+
+    //get average rating of a partner
+    @RequiredRoles({Role.ADMIN, Role.STUDENT})
+    @RequestMapping(value="/partner/{partnerId}/averageRating", method = RequestMethod.GET)
+    public double countRating (@PathVariable("partnerId") int partnerId){
+        return partnerInfoService.countRating(partnerId);
     }
 }

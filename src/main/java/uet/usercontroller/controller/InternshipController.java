@@ -28,7 +28,7 @@ public class InternshipController {
     }
 
     //show all Internship of a partner
-    @RequiredRoles({Role.ADMIN,Role.VIP_PARTNER})
+    @RequiredRoles({Role.ADMIN,Role.VIP_PARTNER, Role.NORMAL_PARTNER})
     @RequestMapping(value= "/partner/{partnerId}/internship", method = RequestMethod.GET)
     public List<Internship> getAllInPartner(@PathVariable int partnerId, HttpServletRequest request){
         String token= request.getHeader("auth-token");

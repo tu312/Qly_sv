@@ -15,7 +15,8 @@ public class PartnerInfoDTO {
     private String fax;
     private String email;
     private String logo;
-    private double averageRating;
+    private Double averageRating;
+    private Integer totalRating;
 
     public int getId() {
         return id;
@@ -105,11 +106,19 @@ public class PartnerInfoDTO {
         this.logo = logo;
     }
 
-    public double getAverageRating() {
+    public Double getAverageRating() {
         return averageRating;
     }
 
-    public void setAverageRating(double averageRating) {
+    public void setAverageRating(Double averageRating) {
         this.averageRating = averageRating;
+    }
+
+    public Integer getTotalRating() {
+        return totalRating;
+    }
+
+    public void setTotalRating(Integer totalRating) {
+        this.totalRating = totalRating;
     }
 }

@@ -34,7 +34,9 @@ public class PartnerInfo {
     @Column(name = "logo")
     private String logo;
     @Column(name="averageRating")
-    private double averageRating;
+    private Double averageRating;
+    @Column(name="totalRating")
+    private Integer totalRating;
 
     public int getId() {
         return id;
@@ -124,11 +126,19 @@ public class PartnerInfo {
         this.logo = logo;
     }
 
-    public double getAverageRating() {
+    public Double getAverageRating() {
         return averageRating;
     }
 
-    public void setAverageRating(double averageRating) {
+    public void setAverageRating(Double averageRating) {
         this.averageRating = averageRating;
+    }
+
+    public Integer getTotalRating() {
+        return totalRating;
+    }
+
+    public void setTotalRating(Integer totalRating) {
+        this.totalRating = totalRating;
     }
 }
