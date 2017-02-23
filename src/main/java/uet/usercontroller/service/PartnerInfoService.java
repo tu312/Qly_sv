@@ -51,6 +51,7 @@ public class PartnerInfoService {
             String taxCode = partnerInfo.getTaxCode();
             String website = partnerInfo.getWebsite();
             String logo = partnerInfo.getLogo();
+            String averageRating = String.valueOf(partnerInfo.getAverageRating());
             lPartnerInfo.put("userId", userId);
             lPartnerInfo.put("status", status);
             lPartnerInfo.put("partnerInfoId", partnerInfoId);
@@ -64,6 +65,7 @@ public class PartnerInfoService {
             lPartnerInfo.put("taxCode", taxCode);
             lPartnerInfo.put("website", website);
             lPartnerInfo.put("logo", logo);
+            lPartnerInfo.put("averageRating", averageRating);
             listPartnerInfo.add(lPartnerInfo);
         }
         return listPartnerInfo;
@@ -91,6 +93,7 @@ public class PartnerInfoService {
             partnerInfo.setFax(partnerInfoDTO.getFax());
             partnerInfo.setEmail(partnerInfoDTO.getEmail());
             partnerInfo.setLogo(partnerInfoDTO.getLogo());
+            partnerInfo.setAverageRating(0.0);
             return partnerInfoRepository.save(partnerInfo);
         }
         else{

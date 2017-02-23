@@ -33,6 +33,8 @@ public class PartnerInfo {
     private String email;
     @Column(name = "logo")
     private String logo;
+    @Column(name="averageRating")
+    private double averageRating;
 
     public int getId() {
         return id;
@@ -120,5 +122,13 @@ public class PartnerInfo {
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }

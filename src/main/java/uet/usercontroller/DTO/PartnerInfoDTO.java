@@ -15,6 +15,7 @@ public class PartnerInfoDTO {
     private String fax;
     private String email;
     private String logo;
+    private double averageRating;
 
     public int getId() {
         return id;
@@ -102,5 +103,13 @@ public class PartnerInfoDTO {
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }

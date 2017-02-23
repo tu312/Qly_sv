@@ -16,15 +16,37 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private InfoBySchool infoBySchool;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Internship internship;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private StudentInfo studentInfo;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Comment comment;
+
+    @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL)
+    private List<JobSkill> jobSkills;
+
+    @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL)
+    private List<Follow> follows;
+
+    public Comment getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
 
-
     public int getId() {    return id; }
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private InfoBySchool infoBySchool;
 
     public InfoBySchool getInfoBySchool() {
         return infoBySchool;
@@ -34,9 +56,6 @@ public class Student {
         this.infoBySchool = infoBySchool;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Internship internship;
-
     public Internship getInternship() {
         return internship;
     }
@@ -44,9 +63,6 @@ public class Student {
     public void setInternship(Internship internship) {
         this.internship = internship;
     }
-
-    @OneToOne(cascade = CascadeType.ALL)
-    private StudentInfo studentInfo;
 
     public StudentInfo getStudentInfo() {
         return studentInfo;
@@ -56,28 +72,12 @@ public class Student {
         this.studentInfo = studentInfo;
     }
 
-    @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL)
-    private List<JobSkill> jobSkills;
-
     public List<JobSkill> getJobSkills() { return jobSkills; }
 
     public void setJobSkills(List<JobSkill> jobSkills) { this.jobSkills = jobSkills; }
-
-    @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL)
-    private List<Follow> follows;
 
     public List<Follow> getFollows() { return follows; }
 
     public void setFollows(List<Follow> follows) { this.follows = follows; }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Comment comment;
-
-    public Comment getComment() {
-        return comment;
-    }
-
-    public void setComment(Comment comment) {
-        this.comment = comment;
-    }
 }

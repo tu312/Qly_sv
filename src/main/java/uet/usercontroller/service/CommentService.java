@@ -38,13 +38,9 @@ public class CommentService {
             HashMap<String, String> lComment = new HashMap<String, String>();
             String commentId = String.valueOf(comment.getId());
             String content = comment.getContent();
-            String partnerId = String.valueOf(comment.getPartnerId());
-            String studentId = String.valueOf(comment.getStudentId());
             String rating = String.valueOf(comment.getRating());
             lComment.put("commentId", commentId);
             lComment.put("content", content);
-            lComment.put("partnerId", partnerId);
-            lComment.put("studentId", studentId);
             lComment.put("rating", rating);
             listComment.add(lComment);
         }
@@ -58,22 +54,20 @@ public class CommentService {
     }
 
     //write a comment
-    public Comment writeComment(int studentId, int partnerId, CommentDTO commentDTO, String token){
+    public Comment writeComment(int partnerId, CommentDTO commentDTO, String token){
         User user = userRepository.findByToken(token);
         Student student = user.getStudent();
-        if (student.getId() ==  studentId){
-            if (student.getComment() == null ){
-                Comment comment = new Comment();
-                comment.setContent(commentDTO.getContent());
-                comment.setRating(commentDTO.getRating());
-                comment.setPartnerId(partnerId);
-                commentRepository.save(comment);
-                return comment;
-            } else {
-                throw new NullPointerException("This user has already commented for this partner.");
-            }
+        if (student.getComment() == null ){
+            Comment comment = new Comment();
+            comment.setContent(commentDTO.getContent());
+            comment.setRating(commentDTO.getRating());
+            comment.setPartnerId(partnerId);
+            student.setComment(comment);
+
+            return  commentRepository.save(comment);
+
         } else {
-            throw new NullPointerException("Error");
+            throw new NullPointerException("This user has already commented for this partner.");
         }
     }
 }
