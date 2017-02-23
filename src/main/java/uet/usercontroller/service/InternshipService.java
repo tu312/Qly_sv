@@ -5,12 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uet.usercontroller.DTO.InternshipDTO;
 import uet.usercontroller.model.*;
-import uet.usercontroller.repository.InternshipRepository;
-import uet.usercontroller.repository.PartnerRepository;
-import uet.usercontroller.repository.StudentRepository;
-import uet.usercontroller.repository.UserRepository;
+import uet.usercontroller.repository.*;
 
 import javax.validation.constraints.Null;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,17 +17,29 @@ import java.util.List;
 @Service
 public class InternshipService {
     @Autowired
-    StudentRepository studentRepository;
+    private StudentRepository studentRepository;
     @Autowired
     private InternshipRepository internshipRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private PartnerRepository partnerRepository;
+    @Autowired
+    private AdminNotificationRepository adminNotificationRepository;
+
+    private Internship createInternship(InternshipDTO internshipDTO){
+        Internship internship = new Internship();
+        internship.setCompany(internshipDTO.getCompany());
+        internship.setPartnerId(internshipDTO.getPartnerId());
+        internship.setEndDate(internshipDTO.getEndDate());
+        internship.setStartDate(internshipDTO.getStartDate());
+        internship.setSupervisor(internshipDTO.getSupervisor());
+        return internship;
+    }
+
     //show all Internships
     public List<Internship> getAllIntern(String token){
-        List<Internship> All = (List<Internship>) internshipRepository.findAll();
-        return  All;
+        return (List<Internship>) internshipRepository.findAll();
     }
 
     //show all internships of a partner
@@ -70,12 +80,7 @@ public class InternshipService {
         Student student = studentRepository.findOne(studentId);
         if(user.getRole().equals(Role.ADMIN)){
             if(student.getInternship()==null) {
-                Internship internship = new Internship();
-                internship.setPartnerId(partnerId);
-                internship.setStartDate(internshipDTO.getStartDate());
-                internship.setEndDate(internshipDTO.getEndDate());
-                internship.setCompany(internshipDTO.getCompany());
-                internship.setSupervisor(internshipDTO.getSupervisor());
+                Internship internship = this.createInternship(internshipDTO);
                 student.setInternship(internship);
                 return internshipRepository.save(internship);
             }
@@ -116,5 +121,35 @@ public class InternshipService {
         else {
             throw new NullPointerException("You don't have permission");
         }
+    }
+
+    public void createMultiInternship(int partnerId, List<InternshipDTO> list, String token) {
+        User user =userRepository.findByToken(token);
+        Partner partner = partnerRepository.findById(partnerId);
+        if(user.getPartner().equals(partner)){
+//            partner.setInternships(list);
+//            List<InternshipDTO> listInternship = new ArrayList<InternshipDTO>();
+            for(InternshipDTO internshipDTO : list){
+                Student student = studentRepository.findById(internshipDTO.getStudentId());
+                if( student.getInternship() == null){
+                    Internship internship = this.createInternship(internshipDTO);
+                    student.setInternship(internship);
+                    internshipRepository.save(internship);
+                } else{
+//                    listInternship.add(internshipDTO);
+                    AdminNotification adminNotification = new AdminNotification();
+                    adminNotification.setIssue("Kiem tra internship cua: " + studentRepository.findById(internshipDTO
+                            .getStudentId()).getInfoBySchool().getStudentCode());
+                    adminNotification.setPartnetId(partnerId);
+                    adminNotification.setUserName(user.getUserName());
+                    adminNotification.setStatus("NEW");
+                    adminNotificationRepository.save(adminNotification);
+                }
+            }
+//            return listInternship;
+        } else {
+            throw new NullPointerException("You don't have permission");
+        }
+
     }
 }

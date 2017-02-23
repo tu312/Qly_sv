@@ -49,9 +49,9 @@ public class FollowController {
     //follow a post
     @RequiredRoles({Role.STUDENT})
     @RequestMapping(value="/post/{postId}/student/{studentId}/follow",method = RequestMethod.PUT)
-    public void createFollow(@PathVariable("postId") int postId, @PathVariable("studentId") int studentId, HttpServletRequest request){
+    public void createFollow(@PathVariable("postId") int postId, @RequestBody FollowDTO followDTO, @PathVariable("studentId") int studentId, HttpServletRequest request){
         String token =request.getHeader("auth-token");
-        followService.createFollow(postId, studentId ,token);
+        followService.createFollow(postId, studentId , token, followDTO);
     }
 
     //unfollow

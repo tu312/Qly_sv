@@ -36,11 +36,11 @@ public class CommentController {
 
     //comment a partner
     @RequiredRoles({Role.STUDENT})
-    @RequestMapping(value="student/{studentId}/writeComment/partner{partnerId}", method = RequestMethod.POST)
-    public Comment writeComment(@PathVariable("studentId") int studentId, @PathVariable("partnerId") int partnerId,
+    @RequestMapping(value="writeComment/partner/{partnerId}", method = RequestMethod.POST)
+    public Comment writeComment(@PathVariable("partnerId") int partnerId,
                                 @RequestBody CommentDTO commentDTO, HttpServletRequest request){
         String token = request.getHeader("auth-token");
-        return commentService.writeComment(studentId, partnerId, commentDTO, token);
+        return commentService.writeComment(partnerId, commentDTO, token);
     }
 
 }

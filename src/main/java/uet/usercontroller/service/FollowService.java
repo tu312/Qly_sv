@@ -31,7 +31,7 @@ public class FollowService {
     public List<Follow> showAllFollowsOfStudent(int studentId, String token) {
         User user = userRepository.findByToken(token);
         if(user.getStudent().getId() == studentId){
-            return (List<Follow>) followRepository.findByStudentId(studentId);
+            return user.getStudent().getFollows();
         } else{
             throw new NullPointerException("User doesn't match with Student");
         }
@@ -46,7 +46,7 @@ public class FollowService {
         }
     }
 
-    public void createFollow(int postId, int studentId, String token) {
+    public void createFollow(int postId, int studentId, String token, FollowDTO followDTO) {
         User user = userRepository.findByToken(token);
         Student student = user.getStudent();
         if(student.getId() == studentId){
@@ -54,6 +54,8 @@ public class FollowService {
                 Follow follow = new Follow();
                 follow.setPostId(postId);
                 follow.setStudentId(studentId);
+                follow.setPostTitle(followDTO.getPostTitle());
+                follow.setStudentName(followDTO.getStudentName());
                 followRepository.save(follow);
             } else {
                 throw new NullPointerException("Post followed");

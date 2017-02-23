@@ -9,12 +9,17 @@ import javax.persistence.*;
 @Table(name="Comment")
 public class Comment {
     @Id
+    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private int studentId;
-    private int partnerId;
+    @Column(name="content")
     private String content;
+    @Column(name="rating")
     private int rating;
+    @Column(name="order")
+    private Integer order;
+
+    private int partnerId;
 
     public int getId() {
         return id;
@@ -22,22 +27,6 @@ public class Comment {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
-
-    public int getPartnerId() {
-        return partnerId;
-    }
-
-    public void setPartnerId(int partnerId) {
-        this.partnerId = partnerId;
     }
 
     public String getContent() {
@@ -54,5 +43,21 @@ public class Comment {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public int getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(int partnerId) {
+        this.partnerId = partnerId;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 }

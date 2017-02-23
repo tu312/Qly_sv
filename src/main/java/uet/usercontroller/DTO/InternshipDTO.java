@@ -12,6 +12,7 @@ public class InternshipDTO {
     private Date startDate;
     private Date  endDate;
     private String supervisor;
+    private int studentId;
 
     public int getId() {
         return id;
@@ -59,5 +60,13 @@ public class InternshipDTO {
 
     public void setSupervisor(String supervisor) {
         this.supervisor = supervisor;
+    }
+
+    public int getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
     }
 }

@@ -40,7 +40,7 @@ public class PostController {
     }
 
     //Create post
-    @RequiredRoles({Role.VIP_PARTNER})
+    @RequiredRoles({Role.VIP_PARTNER, Role.NORMAL_PARTNER})
     @RequestMapping(value="/partner/{partnerId}/post",method = RequestMethod.POST)
     public Post createPost(@PathVariable("partnerId") int partnerId, @RequestBody PostDTO postDTO, HttpServletRequest request) throws IOException {
         String token = request.getHeader("auth-token");
@@ -56,7 +56,7 @@ public class PostController {
     }
 
     //Edit post
-    @RequiredRoles(Role.VIP_PARTNER)
+    @RequiredRoles({Role.VIP_PARTNER, Role.NORMAL_PARTNER})
     @RequestMapping(value="/post/{postId}",method = RequestMethod.PUT)
     public Post editPost(@PathVariable("postId") int postId, @RequestBody PostDTO postDTO, HttpServletRequest request){
         String token = request.getHeader("auth-token");
@@ -64,10 +64,18 @@ public class PostController {
     }
 
     //Delete post
-    @RequiredRoles(Role.VIP_PARTNER)
+    @RequiredRoles({Role.VIP_PARTNER, Role.NORMAL_PARTNER})
     @RequestMapping(value="/post/{postId}",method = RequestMethod.DELETE)
     public void deletePost(@PathVariable("postId") int postId, HttpServletRequest request){
         String token = request.getHeader("auth-token");
         postService.deletePost(postId, token);
     }
+
+    //change post status
+    @RequiredRoles(Role.ADMIN)
+    @RequestMapping(value="post/{postId}/status", method = RequestMethod.PUT)
+    public Post changeStatus(@PathVariable("postId") int postId){
+        return postService.changeStatus(postId);
+    }
+
 }

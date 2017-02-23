@@ -8,6 +8,7 @@ public class FollowDTO {
     private int postId;
     private int studentId;
     private String postTitle;
+    private String studentName;
 
     public int getId() { return id; }
 
@@ -36,5 +37,13 @@ public class FollowDTO {
 
     public void setPostTitle(String postTitle) {
         this.postTitle = postTitle;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
 }
