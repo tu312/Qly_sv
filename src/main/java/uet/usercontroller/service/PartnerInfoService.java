@@ -3,10 +3,8 @@ package uet.usercontroller.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uet.usercontroller.DTO.PartnerInfoDTO;
-import uet.usercontroller.model.Partner;
-import uet.usercontroller.model.PartnerInfo;
-import uet.usercontroller.model.Role;
-import uet.usercontroller.model.User;
+import uet.usercontroller.model.*;
+import uet.usercontroller.repository.CommentRepository;
 import uet.usercontroller.repository.PartnerInfoRepository;
 import uet.usercontroller.repository.PartnerRepository;
 import uet.usercontroller.repository.UserRepository;
@@ -29,6 +27,8 @@ public class PartnerInfoService {
     PartnerRepository partnerRepository;
     @Autowired
     private PartnerInfoRepository partnerInfoRepository;
+    @Autowired
+    CommentRepository commentRepository;
 
     //show all partner info
     public List<HashMap<String, String>> getAllInfo(){
@@ -52,6 +52,7 @@ public class PartnerInfoService {
             String website = partnerInfo.getWebsite();
             String logo = partnerInfo.getLogo();
             lPartnerInfo.put("partnerId", String.valueOf(partner.getId()));
+            String averageRating = String.valueOf(partnerInfo.getAverageRating());
             lPartnerInfo.put("userId", userId);
             lPartnerInfo.put("status", status);
             lPartnerInfo.put("partnerInfoId", partnerInfoId);
@@ -65,6 +66,7 @@ public class PartnerInfoService {
             lPartnerInfo.put("taxCode", taxCode);
             lPartnerInfo.put("website", website);
             lPartnerInfo.put("logo", logo);
+            lPartnerInfo.put("averageRating", averageRating);
             listPartnerInfo.add(lPartnerInfo);
         }
         return listPartnerInfo;
@@ -92,6 +94,7 @@ public class PartnerInfoService {
             partnerInfo.setFax(partnerInfoDTO.getFax());
             partnerInfo.setEmail(partnerInfoDTO.getEmail());
             partnerInfo.setLogo(partnerInfoDTO.getLogo());
+            partnerInfo.setAverageRating(0.0);
             return partnerInfoRepository.save(partnerInfo);
         }
         else{
@@ -173,11 +176,8 @@ public class PartnerInfoService {
 
     }
 
-    //get partner vip logo
-
-
     //delete info of a partner
-    public PartnerInfo deleteInfo(int partnerInfoId, PartnerInfoDTO partnerInfoDTO, String token){
+    public PartnerInfo deleteInfo(int partnerInfoId, String token){
         User user = userRepository.findByToken(token);
         Partner partner = user.getPartner();
         PartnerInfo  partnerInfo = partnerInfoRepository.findOne(partnerInfoId);
@@ -212,6 +212,7 @@ public class PartnerInfoService {
         }
     }
 
+    //get partner vip logo
     public List<HashMap<String, String>> getPartnerViplogo() {
         List<HashMap<String, String>> listPartnerInfo = new ArrayList<HashMap<String, String>>();
 //        Role role = Role.VIP_PARTNER;
@@ -229,5 +230,22 @@ public class PartnerInfoService {
             listPartnerInfo.add(lPartnerInfo);
         }
         return listPartnerInfo;
+    }
+
+    //get average rating of a partner
+    public double countRating(int partnerId){
+        double averageRating;
+        int rating=0;
+        Partner partner = partnerRepository.findOne(partnerId);
+        PartnerInfo partnerInfo = partner.getPartnerInfo();
+        int totalRating = partnerInfo.getTotalRating();
+        List<Comment> listComment = commentRepository.findByPartnerId(partnerId);
+        for (Comment comment : listComment){
+            rating += comment.getRating();
+        }
+        averageRating = (double) rating/totalRating;
+        partnerInfo.setAverageRating(averageRating);
+        partnerInfoRepository.save(partnerInfo);
+        return averageRating;
     }
 }

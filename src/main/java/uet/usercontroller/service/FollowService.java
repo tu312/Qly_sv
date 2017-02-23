@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uet.usercontroller.DTO.FollowDTO;
 import uet.usercontroller.DTO.PostDTO;
-import uet.usercontroller.model.Follow;
-import uet.usercontroller.model.Post;
-import uet.usercontroller.model.Student;
-import uet.usercontroller.model.User;
+import uet.usercontroller.model.*;
 import uet.usercontroller.repository.*;
 
 import java.util.List;
@@ -31,7 +28,7 @@ public class FollowService {
     public List<Follow> showAllFollowsOfStudent(int studentId, String token) {
         User user = userRepository.findByToken(token);
         if(user.getStudent().getId() == studentId){
-            return (List<Follow>) followRepository.findByStudentId(studentId);
+            return user.getStudent().getFollows();
         } else{
             throw new NullPointerException("User doesn't match with Student");
         }
@@ -39,14 +36,18 @@ public class FollowService {
 
     public List<Follow> showAllFollowsOfPost(int postId, String token) {
         User user = userRepository.findByToken(token);
-        if(user.getPartner().equals(partnerRepository.findByPostId(postId))){
+        if(user.getRole() == Role.ADMIN){
             return (List<Follow>) followRepository.findByPostId(postId);
         } else {
-            throw new NullPointerException("User doesn't match with Partner");
+            if (user.getPartner().equals(partnerRepository.findByPostId(postId))) {
+                return (List<Follow>) followRepository.findByPostId(postId);
+            } else {
+                throw new NullPointerException("User doesn't match with Partner");
+            }
         }
     }
 
-    public void createFollow(int postId, int studentId, String token) {
+    public void createFollow(int postId, int studentId, String token, FollowDTO followDTO) {
         User user = userRepository.findByToken(token);
         Student student = user.getStudent();
         if(student.getId() == studentId){
@@ -54,6 +55,8 @@ public class FollowService {
                 Follow follow = new Follow();
                 follow.setPostId(postId);
                 follow.setStudentId(studentId);
+                follow.setPostTitle(followDTO.getPostTitle());
+                follow.setStudentName(followDTO.getStudentName());
                 followRepository.save(follow);
             } else {
                 throw new NullPointerException("Post followed");

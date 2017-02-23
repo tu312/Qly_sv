@@ -3,14 +3,8 @@ package uet.usercontroller.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uet.usercontroller.DTO.CommentDTO;
-import uet.usercontroller.model.Comment;
-import uet.usercontroller.model.Partner;
-import uet.usercontroller.model.Student;
-import uet.usercontroller.model.User;
-import uet.usercontroller.repository.CommentRepository;
-import uet.usercontroller.repository.PartnerRepository;
-import uet.usercontroller.repository.StudentRepository;
-import uet.usercontroller.repository.UserRepository;
+import uet.usercontroller.model.*;
+import uet.usercontroller.repository.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +23,8 @@ public class CommentService {
     UserRepository userRepository;
     @Autowired
     StudentRepository studentRepository;
+    @Autowired
+    PartnerInfoRepository partnerInfoRepository;
 
     //show all comments
     public List<HashMap<String, String>> showAllComment(){
@@ -38,13 +34,9 @@ public class CommentService {
             HashMap<String, String> lComment = new HashMap<String, String>();
             String commentId = String.valueOf(comment.getId());
             String content = comment.getContent();
-            String partnerId = String.valueOf(comment.getPartnerId());
-            String studentId = String.valueOf(comment.getStudentId());
             String rating = String.valueOf(comment.getRating());
             lComment.put("commentId", commentId);
             lComment.put("content", content);
-            lComment.put("partnerId", partnerId);
-            lComment.put("studentId", studentId);
             lComment.put("rating", rating);
             listComment.add(lComment);
         }
@@ -58,22 +50,29 @@ public class CommentService {
     }
 
     //write a comment
-    public Comment writeComment(int studentId, int partnerId, CommentDTO commentDTO, String token){
+    public Comment writeComment(int partnerId, CommentDTO commentDTO, String token){
         User user = userRepository.findByToken(token);
         Student student = user.getStudent();
-        if (student.getId() ==  studentId){
-            if (student.getComment() == null ){
-                Comment comment = new Comment();
-                comment.setContent(commentDTO.getContent());
-                comment.setRating(commentDTO.getRating());
-                comment.setPartnerId(partnerId);
-                commentRepository.save(comment);
-                return comment;
+        if (student.getComment() == null ){
+            Comment comment = new Comment();
+            comment.setContent(commentDTO.getContent());
+            comment.setRating(commentDTO.getRating());
+            comment.setPartnerId(partnerId);
+            student.setComment(comment);
+            Partner partner = partnerRepository.findOne(partnerId);
+            PartnerInfo partnerInfo = partner.getPartnerInfo();
+            if (partnerInfo.getTotalRating() == null){
+                partnerInfo.setTotalRating(1);
             } else {
-                throw new NullPointerException("This user has already commented for this partner.");
+                int totalRating;
+                totalRating = partnerInfo.getTotalRating();
+                totalRating++;
+                partnerInfo.setTotalRating(totalRating);
             }
+            partnerInfoRepository.save(partnerInfo);
+            return  commentRepository.save(comment);
         } else {
-            throw new NullPointerException("Error");
+            throw new NullPointerException("This user has already commented for this partner.");
         }
     }
 }

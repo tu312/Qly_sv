@@ -14,6 +14,7 @@ public class PostDTO {
     private Date datePost;
     private String describePost;
     private String image;
+    private String status;
 
     public int getId() {
         return id;
@@ -42,4 +43,12 @@ public class PostDTO {
     }
 
     public void setImage(String image) { this.image = image; }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

@@ -10,34 +10,26 @@ import javax.persistence.*;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    private int studentId;
-    private int partnerId;
+    private Integer id;
+    private Integer rating;
     private String content;
-    private int rating;
+    private Integer filter;
+    private Integer partnerId;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getStudentId() {
-        return studentId;
+    public Integer getRating() {
+        return rating;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
-
-    public int getPartnerId() {
-        return partnerId;
-    }
-
-    public void setPartnerId(int partnerId) {
-        this.partnerId = partnerId;
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 
     public String getContent() {
@@ -48,11 +40,19 @@ public class Comment {
         this.content = content;
     }
 
-    public int getRating() {
-        return rating;
+    public Integer getPartnerId() {
+        return partnerId;
     }
 
-    public void setRating(int rating) {
-        this.rating = rating;
+    public void setPartnerId(Integer partnerId) {
+        this.partnerId = partnerId;
+    }
+
+    public Integer getFilter() {
+        return filter;
+    }
+
+    public void setFilter(Integer filter) {
+        this.filter = filter;
     }
 }

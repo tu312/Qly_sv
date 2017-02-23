@@ -23,30 +23,14 @@ public class Partner {
     @OneToMany(mappedBy = "partnerId", cascade = CascadeType.ALL)
     private List<Post> post;
 
-    public List<Post> getPost() {
-        return post;
-    }
-
-    public void setPost(List<Post> post) {
-        this.post = post;
-    }
-
     @OneToMany(mappedBy = "partnerId", cascade = CascadeType.ALL)
     private List<Internship> internships;
-
-    public List<Internship> getInternships() { return internships; }
-
-    public void setInternships(List<Internship> internships) { this.internships = internships; }
 
     @OneToMany(mappedBy = "partnerId", cascade = CascadeType.ALL)
     private List<PartnerContact> partnerContacts;
 
-    @OneToMany(mappedBy = "partnerId", cascade = CascadeType.ALL)
-    private List<Comment> comments;
-
-    public List<PartnerContact> getPartnerContacts() { return partnerContacts; }
-
-    public void setPartnerContacts(List<PartnerContact> partnerContacts) { this.partnerContacts = partnerContacts; }
+//    @OneToMany(mappedBy = "partnerId", cascade = CascadeType.ALL)
+//    private List<Comment> comments = new ArrayList<Comment>();
 
     public int getId() {
         return id;
@@ -64,13 +48,37 @@ public class Partner {
         this.partnerInfo = partnerInfo;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public List<Post> getPost() {
+        return post;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setPost(List<Post> post) {
+        this.post = post;
     }
+
+    public List<Internship> getInternships() {
+        return internships;
+    }
+
+    public void setInternships(List<Internship> internships) {
+        this.internships = internships;
+    }
+
+    public List<PartnerContact> getPartnerContacts() {
+        return partnerContacts;
+    }
+
+    public void setPartnerContacts(List<PartnerContact> partnerContacts) {
+        this.partnerContacts = partnerContacts;
+    }
+
+//    public List<Comment> getComments() {
+//        return comments;
+//    }
+//
+//    public void addComment(Comment comment) {
+//        this.comments.add(comment);
+//    }
 }
 
 

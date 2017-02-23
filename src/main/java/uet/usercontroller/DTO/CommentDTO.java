@@ -4,34 +4,18 @@ package uet.usercontroller.DTO;
  * Created by Tu on 16-Feb-17.
  */
 public class CommentDTO {
-    private int id;
-    private int studentId;
-    private int partnerId;
+    private Integer id;
     private String content;
-    private int rating;
+    private Integer rating;
+    private Integer partnerId;
+    private Integer filter;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
-    }
-
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
-
-    public int getPartnerId() {
-        return partnerId;
-    }
-
-    public void setPartnerId(int partnerId) {
-        this.partnerId = partnerId;
     }
 
     public String getContent() {
@@ -42,11 +26,27 @@ public class CommentDTO {
         this.content = content;
     }
 
-    public int getRating() {
+    public Integer getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
+    }
+
+    public Integer getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(Integer partnerId) {
+        this.partnerId = partnerId;
+    }
+
+    public Integer getFilter() {
+        return filter;
+    }
+
+    public void setFilter(Integer filter) {
+        this.filter = filter;
     }
 }
