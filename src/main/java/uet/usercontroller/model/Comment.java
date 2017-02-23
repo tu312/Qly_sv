@@ -16,6 +16,8 @@ public class Comment {
     private String content;
     @Column(name="rating")
     private int rating;
+    @Column(name="order")
+    private Integer order;
 
     private int partnerId;
 
@@ -49,5 +51,13 @@ public class Comment {
 
     public void setPartnerId(int partnerId) {
         this.partnerId = partnerId;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 }

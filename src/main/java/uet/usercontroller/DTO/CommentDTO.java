@@ -8,6 +8,7 @@ public class CommentDTO {
     private String content;
     private int rating;
     private int partnerId;
+    private Integer order;
 
     public int getId() {
         return id;
@@ -39,5 +40,13 @@ public class CommentDTO {
 
     public void setPartnerId(int partnerId) {
         this.partnerId = partnerId;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 }
