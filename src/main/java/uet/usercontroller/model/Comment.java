@@ -9,24 +9,27 @@ import javax.persistence.*;
 @Table(name="Comment")
 public class Comment {
     @Id
-    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    @Column(name="content")
+    private Integer id;
+    private Integer rating;
     private String content;
-    @Column(name="rating")
-    private int rating;
-    @Column(name="order")
-    private Integer order;
+    private Integer filter;
+    private Integer partnerId;
 
-    private int partnerId;
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 
     public String getContent() {
@@ -37,27 +40,19 @@ public class Comment {
         this.content = content;
     }
 
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public int getPartnerId() {
+    public Integer getPartnerId() {
         return partnerId;
     }
 
-    public void setPartnerId(int partnerId) {
+    public void setPartnerId(Integer partnerId) {
         this.partnerId = partnerId;
     }
 
-    public Integer getOrder() {
-        return order;
+    public Integer getFilter() {
+        return filter;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setFilter(Integer filter) {
+        this.filter = filter;
     }
 }
