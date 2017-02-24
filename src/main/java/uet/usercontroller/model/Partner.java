@@ -29,8 +29,8 @@ public class Partner {
     @OneToMany(mappedBy = "partnerId", cascade = CascadeType.ALL)
     private List<PartnerContact> partnerContacts;
 
-//    @OneToMany(mappedBy = "partnerId", cascade = CascadeType.ALL)
-//    private List<Comment> comments = new ArrayList<Comment>();
+    @OneToMany(mappedBy = "partnerId", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<Comment>();
 
     public int getId() {
         return id;
@@ -72,13 +72,13 @@ public class Partner {
         this.partnerContacts = partnerContacts;
     }
 
-//    public List<Comment> getComments() {
-//        return comments;
-//    }
-//
-//    public void addComment(Comment comment) {
-//        this.comments.add(comment);
-//    }
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
 }
 
 

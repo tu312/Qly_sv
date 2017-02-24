@@ -31,6 +31,8 @@ public class UserService {
     PartnerRepository partnerRepository;
     @Autowired
     PartnerInfoRepository partnerInfoRepository;
+    @Autowired
+    AdminNotificationRepository adminNotificationRepository;
 
     //Show all user
     public List<User> getUsers(){
@@ -192,35 +194,45 @@ public class UserService {
     //create multi students
     public void createStudent(List<CreateStudentDTO> List) {
         for(CreateStudentDTO createStudentDTO : List) {
-//        List.forEach(createStudentDTO -> {
-            User user = new User();
-            user.setUserName(createStudentDTO.getUserName());
-            user.setPassword(String.valueOf(createStudentDTO.getStudentCode()));
-            user.setStatus("A");
-            user.setRole(Role.STUDENT);
-            Student student = new Student();
-            user.setStudent(student);
-            //create StudentInfo
-            StudentInfo studentInfo = new StudentInfo();
-            studentInfo.setFullName(createStudentDTO.getStudentName());
-            student.setStudentInfo(studentInfo);
-            studentInfoRepository.save(studentInfo);
-            //create InfoByschool
-            InfoBySchool infoBySchool = new InfoBySchool();
-            infoBySchool.setDiploma(createStudentDTO.getDiploma());
-            infoBySchool.setStudentName((createStudentDTO.getStudentName()));
-            infoBySchool.setGPA(createStudentDTO.getGPA());
-            infoBySchool.setGraduationYear(createStudentDTO.getGraduationYear());
-            infoBySchool.setGrade(createStudentDTO.getGrade());
-            infoBySchool.setMajor(createStudentDTO.getMajor());
-            infoBySchool.setStudentClass(createStudentDTO.getStudentClass());
-            infoBySchool.setStudentCode(createStudentDTO.getStudentCode());
-            student.setInfoBySchool(infoBySchool);
-            infoBySchoolRepository.save(infoBySchool);
-            studentRepository.save(student);
-            userRepository.save(user);
-//        });
-
+            //check if user existed
+            int studentCode = createStudentDTO.getStudentCode();
+            User checkIfExisted = userRepository.findByUserName(String.valueOf(studentCode));
+            if (checkIfExisted == null) {
+//                List.forEach(createStudentDTO -> {
+                User user = new User();
+                user.setUserName(String.valueOf(createStudentDTO.getStudentCode()));
+                user.setPassword(String.valueOf(createStudentDTO.getStudentCode()));
+                user.setStatus("A");
+                user.setRole(Role.STUDENT);
+                Student student = new Student();
+                user.setStudent(student);
+                //create StudentInfo
+                StudentInfo studentInfo = new StudentInfo();
+                studentInfo.setFullName(createStudentDTO.getStudentName());
+                student.setStudentInfo(studentInfo);
+                studentInfoRepository.save(studentInfo);
+                //create InfoByschool
+                InfoBySchool infoBySchool = new InfoBySchool();
+                infoBySchool.setDiploma(createStudentDTO.getDiploma());
+                infoBySchool.setStudentName((createStudentDTO.getStudentName()));
+                infoBySchool.setGPA(createStudentDTO.getGPA());
+                infoBySchool.setGraduationYear(createStudentDTO.getGraduationYear());
+                infoBySchool.setGrade(createStudentDTO.getGrade());
+                infoBySchool.setMajor(createStudentDTO.getMajor());
+                infoBySchool.setStudentClass(createStudentDTO.getStudentClass());
+                infoBySchool.setStudentCode(createStudentDTO.getStudentCode());
+                student.setInfoBySchool(infoBySchool);
+                infoBySchoolRepository.save(infoBySchool);
+                studentRepository.save(student);
+                userRepository.save(user);
+//              });
+            } else {
+                AdminNotification adminNotification = new AdminNotification();
+                adminNotification.setIssue("User existed: " + checkIfExisted);
+                adminNotification.setUserName(String.valueOf(studentCode));
+                adminNotification.setStatus("NEW");
+                adminNotificationRepository.save(adminNotification);
+            }
         }
     }
 }
