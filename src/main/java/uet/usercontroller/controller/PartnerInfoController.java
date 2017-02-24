@@ -31,7 +31,7 @@ public class PartnerInfoController {
     //show a partner info
     @RequiredRoles({Role.ADMIN, Role.VIP_PARTNER, Role.STUDENT})
     @RequestMapping(value="partnerInfo/{partnerInfoId}", method = RequestMethod.GET)
-    public PartnerInfo showInfo(@PathVariable("partnerInfoId") int partnerInfoId){
+    public HashMap<String, String> showInfo(@PathVariable("partnerInfoId") int partnerInfoId){
         return partnerInfoService.showInfo(partnerInfoId);
     }
 

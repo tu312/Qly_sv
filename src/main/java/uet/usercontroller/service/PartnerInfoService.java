@@ -51,8 +51,8 @@ public class PartnerInfoService {
             String taxCode = partnerInfo.getTaxCode();
             String website = partnerInfo.getWebsite();
             String logo = partnerInfo.getLogo();
-            lPartnerInfo.put("partnerId", String.valueOf(partner.getId()));
             String averageRating = String.valueOf(partnerInfo.getAverageRating());
+            lPartnerInfo.put("partnerId", String.valueOf(partner.getId()));
             lPartnerInfo.put("userId", userId);
             lPartnerInfo.put("status", status);
             lPartnerInfo.put("partnerInfoId", partnerInfoId);
@@ -73,9 +73,40 @@ public class PartnerInfoService {
     }
 
     //show a partner info
-    public PartnerInfo showInfo(int partnerInfoId){
+    public HashMap<String, String> showInfo(int partnerInfoId){
         PartnerInfo partnerInfo = partnerInfoRepository.findOne(partnerInfoId);
-        return partnerInfo;
+        HashMap<String, String> showPartnerInfo = new HashMap<String, String>();
+        Partner partner = partnerRepository.findByPartnerInfoId(partnerInfo.getId());
+        User user = userRepository.findByPartnerId(partner.getId());
+        String userId = String.valueOf(user.getId());
+        String status = user.getStatus();
+        String address = partnerInfo.getAddress();
+        String director = partnerInfo.getDirector();
+        String email = partnerInfo.getEmail();
+        String fax = partnerInfo.getFax();
+        String fieldWork = partnerInfo.getFieldWork();
+        String partnerName = partnerInfo.getPartnerName();
+        String phone = partnerInfo.getPhone();
+        String taxCode = partnerInfo.getTaxCode();
+        String website = partnerInfo.getWebsite();
+        String logo = partnerInfo.getLogo();
+        String averageRating = String.valueOf(partnerInfo.getAverageRating());
+        showPartnerInfo.put("partnerId", String.valueOf(partner.getId()));
+        showPartnerInfo.put("userId", userId);
+        showPartnerInfo.put("status", status);
+        showPartnerInfo.put("partnerInfoId", String.valueOf(partnerInfoId));
+        showPartnerInfo.put("address", address);
+        showPartnerInfo.put("director", director);
+        showPartnerInfo.put("email", email);
+        showPartnerInfo.put("fax", fax);
+        showPartnerInfo.put("fieldWork", fieldWork);
+        showPartnerInfo.put("partnerName", partnerName);
+        showPartnerInfo.put("phone", phone);
+        showPartnerInfo.put("taxCode", taxCode);
+        showPartnerInfo.put("website", website);
+        showPartnerInfo.put("logo", logo);
+        showPartnerInfo.put("averageRating", averageRating);
+        return showPartnerInfo;
     }
 
     //create a partner info
