@@ -38,7 +38,8 @@ public class InternshipController {
     //Create a Internship
     @RequiredRoles({Role.ADMIN})
     @RequestMapping(value = "/student/{studentId}/{partnerId}/intern", method = RequestMethod.POST)
-    public Internship createIntern(@PathVariable("studentId") int studentId,@PathVariable("partnerId") int partnerId,@RequestBody InternshipDTO internshipDTO,HttpServletRequest request) {
+    public Internship createIntern(@PathVariable("studentId") int studentId,@PathVariable("partnerId") int partnerId,
+                                   @RequestBody InternshipDTO internshipDTO,HttpServletRequest request) {
         String token = request.getHeader("auth-token");
         return internshipService.createIntern(studentId,partnerId,internshipDTO,token);
     }
@@ -62,7 +63,8 @@ public class InternshipController {
     //Edit a internship
     @RequiredRoles({Role.ADMIN})
     @RequestMapping(value = "/intern/{internId}", method = RequestMethod.PUT)
-    public Internship changeInternById(@PathVariable("internId") int id, @RequestBody InternshipDTO internshipDTO, HttpServletRequest request) {
+    public Internship changeInternById(@PathVariable("internId") int id, @RequestBody InternshipDTO internshipDTO,
+                                       HttpServletRequest request) {
         String token = request.getHeader("auth-token");
         return internshipService.changeById(id,internshipDTO,token);
     }

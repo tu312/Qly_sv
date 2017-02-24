@@ -123,8 +123,10 @@ public class InternshipService {
         }
     }
 
+
+    //create internship from excel
     public void createMultiInternship(int partnerId, List<InternshipDTO> list, String token) {
-        User user =userRepository.findByToken(token);
+        User user = userRepository.findByToken(token);
         Partner partner = partnerRepository.findById(partnerId);
         if(user.getPartner().equals(partner)){
 //            partner.setInternships(list);
