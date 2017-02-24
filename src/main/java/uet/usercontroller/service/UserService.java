@@ -194,7 +194,7 @@ public class UserService {
         for(CreateStudentDTO createStudentDTO : List) {
 //        List.forEach(createStudentDTO -> {
             User user = new User();
-            user.setUserName(createStudentDTO.getUserName());
+            user.setUserName(String.valueOf(createStudentDTO.getStudentCode()));
             user.setPassword(String.valueOf(createStudentDTO.getStudentCode()));
             user.setStatus("A");
             user.setRole(Role.STUDENT);
