@@ -30,9 +30,9 @@ public class PartnerInfoController {
 
     //show a partner info
     @RequiredRoles({Role.ADMIN, Role.VIP_PARTNER, Role.STUDENT})
-    @RequestMapping(value="partnerInfo/{partnerInfoId}", method = RequestMethod.GET)
-    public HashMap<String, String> showInfo(@PathVariable("partnerInfoId") int partnerInfoId){
-        return partnerInfoService.showInfo(partnerInfoId);
+    @RequestMapping(value="partnerInfo/{partnerId}", method = RequestMethod.GET)
+    public HashMap<String, String> showInfo(@PathVariable("partnerId") int partnerId){
+        return partnerInfoService.showInfo(partnerId);
     }
 
     //create a partner info
@@ -55,11 +55,11 @@ public class PartnerInfoController {
 
     //change logo
     @RequiredRoles({Role.VIP_PARTNER, Role.NORMAL_PARTNER})
-    @RequestMapping(value="partner/{partnerId}/changeLogo", method = RequestMethod.PUT)
-    public void changeLogo(@PathVariable("partnerId") int partnerId, @RequestBody PartnerInfoDTO partnerInfoDTO,
+    @RequestMapping(value="/changeLogo", method = RequestMethod.PUT)
+    public void changeLogo(@RequestBody PartnerInfoDTO partnerInfoDTO,
                            HttpServletRequest request) throws IOException {
         String token = request.getHeader("auth-token");
-        partnerInfoService.changeLogo(partnerId, partnerInfoDTO, token);
+        partnerInfoService.changeLogo(partnerInfoDTO, token);
     }
 
     //get partner vip logo

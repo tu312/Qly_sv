@@ -57,6 +57,7 @@ public class CommentService {
             Comment comment = new Comment();
             comment.setContent(commentDTO.getContent());
             comment.setRating(commentDTO.getRating());
+            // them kiem tra neu rating > 10 thi ko luu
             comment.setPartnerId(partnerId);
             student.setComment(comment);
             Partner partner = partnerRepository.findOne(partnerId);

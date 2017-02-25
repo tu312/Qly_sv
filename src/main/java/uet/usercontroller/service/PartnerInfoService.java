@@ -73,11 +73,11 @@ public class PartnerInfoService {
     }
 
     //show a partner info
-    public HashMap<String, String> showInfo(int partnerInfoId){
-        PartnerInfo partnerInfo = partnerInfoRepository.findOne(partnerInfoId);
+    public HashMap<String, String> showInfo(int partnerId){
+//        Partner partner = partnerRepository.findById(partnerId);
+        PartnerInfo partnerInfo = partnerRepository.findById(partnerId).getPartnerInfo();
+        User user = userRepository.findByPartnerId(partnerId);
         HashMap<String, String> showPartnerInfo = new HashMap<String, String>();
-        Partner partner = partnerRepository.findByPartnerInfoId(partnerInfo.getId());
-        User user = userRepository.findByPartnerId(partner.getId());
         String userId = String.valueOf(user.getId());
         String status = user.getStatus();
         String address = partnerInfo.getAddress();
@@ -91,10 +91,10 @@ public class PartnerInfoService {
         String website = partnerInfo.getWebsite();
         String logo = partnerInfo.getLogo();
         String averageRating = String.valueOf(partnerInfo.getAverageRating());
-        showPartnerInfo.put("partnerId", String.valueOf(partner.getId()));
+        showPartnerInfo.put("partnerId", String.valueOf(partnerId));
         showPartnerInfo.put("userId", userId);
         showPartnerInfo.put("status", status);
-        showPartnerInfo.put("partnerInfoId", String.valueOf(partnerInfoId));
+        showPartnerInfo.put("partnerInfoId", String.valueOf(partnerInfo.getId()));
         showPartnerInfo.put("address", address);
         showPartnerInfo.put("director", director);
         showPartnerInfo.put("email", email);
@@ -174,37 +174,32 @@ public class PartnerInfoService {
     }
 
     //change Logo
-    public void changeLogo(int partnerId, PartnerInfoDTO partnerInfoDTO, String token) throws IOException {
+    public void changeLogo(PartnerInfoDTO partnerInfoDTO, String token) throws IOException {
         User user = userRepository.findByToken(token);
-        Partner partner = partnerRepository.findById(partnerId);
-        if (user.getPartner().equals(partner)) {
-            String username = user.getUserName();
-            PartnerInfo partnerInfo = partner.getPartnerInfo();
-            //code đổi tên image thành partner_id.jpg và save vào database
-            String pathname = "../Qly_SV_client/app/users_data/partner/" + username;
-            File directory = new File(pathname);
-            if (! directory.exists()) {
-                directory.mkdir();
-            }
-//        directory.delete();
-            pathname = "../Qly_SV_client/app/users_data/partner/" + username + "/logo/";
-            String directoryName = "users_data/partner/" + username + "/logo/";
-            String fileName = username + "_logo.jpg";
-            directory = new File(pathname);
-            if (! directory.exists()) {
-                directory.mkdir();
-            }
-            byte[] btDataFile = new sun.misc.BASE64Decoder().decodeBuffer(partnerInfoDTO.getLogo());
-            File of = new File( pathname + fileName);
-            FileOutputStream osf = new FileOutputStream(of);
-            osf.write(btDataFile);
-            osf.flush();
-            partnerInfo.setLogo("http://localhost:8000/" + directoryName + username + "_logo.jpg");
-            partnerInfoRepository.save(partnerInfo);
-        } else{
-            throw new NullPointerException("User doesn't match with Partner.");
+        Partner partner = user.getPartner();
+        String username = user.getUserName();
+        PartnerInfo partnerInfo = partner.getPartnerInfo();
+        //code đổi tên image thành partner_id.jpg và save vào database
+        String pathname = "../Qly_SV_client/app/users_data/partner/" + username;
+        File directory = new File(pathname);
+        if (! directory.exists()) {
+            directory.mkdir();
         }
-
+//        directory.delete();
+        pathname = "../Qly_SV_client/app/users_data/partner/" + username + "/logo/";
+        String directoryName = "users_data/partner/" + username + "/logo/";
+        String fileName = username + "_logo.jpg";
+        directory = new File(pathname);
+        if (! directory.exists()) {
+            directory.mkdir();
+        }
+        byte[] btDataFile = new sun.misc.BASE64Decoder().decodeBuffer(partnerInfoDTO.getLogo());
+        File of = new File( pathname + fileName);
+        FileOutputStream osf = new FileOutputStream(of);
+        osf.write(btDataFile);
+        osf.flush();
+        partnerInfo.setLogo("http://localhost:8000/" + directoryName + username + "_logo.jpg");
+        partnerInfoRepository.save(partnerInfo);
     }
 
     //delete info of a partner

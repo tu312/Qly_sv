@@ -46,14 +46,13 @@ public class InternshipController {
 
     //create internship from excel
     @RequiredRoles({Role.ADMIN,Role.VIP_PARTNER})
-    @RequestMapping(value="/partner/{partnerId}/createInternship", method = RequestMethod.POST)
-    public void createInternship(@PathVariable("partnerId") int partnerId, @RequestBody List<InternshipDTO> List,
-                                             HttpServletRequest request){
+    @RequestMapping(value="/partner/createInternship", method = RequestMethod.PUT)
+    public void createInternship(@RequestBody List<InternshipDTO> List, HttpServletRequest request){
         String token= request.getHeader("auth-token");
-        internshipService.createMultiInternship(partnerId, List, token);
+        internshipService.createMultiInternship(List, token);
     }
 
-    //find a internship
+    //find student by internId
     @RequiredRoles({Role.ADMIN,Role.VIP_PARTNER,Role.STUDENT})
     @RequestMapping(value = "/intern/{internId}", method = RequestMethod.GET)
     public Internship findInternById(@PathVariable("internId") int id,HttpServletRequest request) {
