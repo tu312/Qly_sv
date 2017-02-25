@@ -13,6 +13,11 @@ public class InternshipDTO {
     private Date  endDate;
     private String supervisor;
     private int studentId;
+    private int studentCode;
+    private String studentName;
+    private String grade;
+    private String studentClass;
+    private String birthday;
 
     public int getId() {
         return id;
@@ -68,5 +73,45 @@ public class InternshipDTO {
 
     public void setStudentId(int studentId) {
         this.studentId = studentId;
+    }
+
+    public int getStudentCode() {
+        return studentCode;
+    }
+
+    public void setStudentCode(int studentCode) {
+        this.studentCode = studentCode;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getStudentClass() {
+        return studentClass;
+    }
+
+    public void setStudentClass(String studentClass) {
+        this.studentClass = studentClass;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 }

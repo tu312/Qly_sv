@@ -34,6 +34,7 @@ public class InternshipService {
         internship.setEndDate(internshipDTO.getEndDate());
         internship.setStartDate(internshipDTO.getStartDate());
         internship.setSupervisor(internshipDTO.getSupervisor());
+        internship.setStudentId(internshipDTO.getStudentId());
         return internship;
     }
 
@@ -60,15 +61,8 @@ public class InternshipService {
         User user = userRepository.findByToken(token);
         Internship internship = internshipRepository.findById(id);
         if(user.getRole()==Role.STUDENT){
-            Student student = user.getStudent();
-            if(student.getInternship().equals(internship)){
-                return internship;
-            }
-            else{
-                throw new NullPointerException("You don't have permission");
-            }
-        }
-        else {
+            return user.getStudent().getInternship();
+        } else {
             return internship;
         }
     }
@@ -124,32 +118,38 @@ public class InternshipService {
     }
 
     //create internship from excel
-    public void createMultiInternship(int partnerId, List<InternshipDTO> list, String token) {
+    public void createMultiInternship(List<InternshipDTO> list, String token) {
         User user = userRepository.findByToken(token);
-        Partner partner = partnerRepository.findById(partnerId);
-        if(user.getPartner().equals(partner)){
-//            partner.setInternships(list);
-//            List<InternshipDTO> listInternship = new ArrayList<InternshipDTO>();
-            for(InternshipDTO internshipDTO : list){
-                Student student = studentRepository.findById(internshipDTO.getStudentId());
+        Partner partner = user.getPartner();
+        for(InternshipDTO internshipDTO : list){
+            User user_ = userRepository.findByUserName(String.valueOf(internshipDTO.getStudentCode()));
+            if(user_ == null){
+                AdminNotification adminNotification = new AdminNotification();
+                adminNotification.setIssue("Kiem tra lai sinh vien: " + internshipDTO.getStudentName() + "-"
+                    + internshipDTO.getBirthday() + "-" + internshipDTO.getGrade() + internshipDTO.getStudentClass()
+                    + " khong tim thay sinh vien co MSSV: " + internshipDTO.getStudentCode());
+                adminNotification.setPartnetId(partner.getId());
+                adminNotification.setStatus("NEW");
+                adminNotificationRepository.save(adminNotification);
+            } else{
+                Student student = user_.getStudent();
                 if( student.getInternship() == null){
+                    internshipDTO.setStudentId(student.getId());
+                    internshipDTO.setPartnerId((partner.getId()));
                     Internship internship = this.createInternship(internshipDTO);
                     student.setInternship(internship);
                     internshipRepository.save(internship);
                 } else{
-//                    listInternship.add(internshipDTO);
                     AdminNotification adminNotification = new AdminNotification();
-                    adminNotification.setIssue("Kiem tra internship cua: " + studentRepository.findById(internshipDTO
-                            .getStudentId()).getInfoBySchool().getStudentCode());
-                    adminNotification.setPartnetId(partnerId);
+                    adminNotification.setIssue("Kiem tra lai sinh vien: " + internshipDTO.getStudentName() + "-"
+                        + internshipDTO.getBirthday() + "-" + internshipDTO.getGrade() + internshipDTO.getStudentClass()
+                        + ", internship da ton tai");
+                    adminNotification.setPartnetId(partner.getId());
                     adminNotification.setUserName(user.getUserName());
                     adminNotification.setStatus("NEW");
                     adminNotificationRepository.save(adminNotification);
                 }
             }
-//            return listInternship;
-        } else {
-            throw new NullPointerException("You don't have permission");
         }
 
     }
