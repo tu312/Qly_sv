@@ -77,7 +77,7 @@ public class CommentService {
                     throw new NullPointerException("Rating value must be between 1 and 5.");
                 }
             } else {
-                throw new NullPointerException("Missing Information. Please write a review and rate this partner.")
+                throw new NullPointerException("Missing Information. Please write a review and rate this partner.");
             }
         } else {
             throw new NullPointerException("This user has already commented for this partner.");
