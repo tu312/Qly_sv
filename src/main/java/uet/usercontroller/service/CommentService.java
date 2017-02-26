@@ -85,5 +85,12 @@ public class CommentService {
         List<Comment> topComment = (List<Comment>) commentRepository.findByFilterNotLike(0);
         return topComment;
     }
+
+    //admin change filter value
+    public Comment changeFilterValue(int commentId, CommentDTO commentDTO){
+        Comment comment = commentRepository.findOne(commentId);
+        comment.setFilter(commentDTO.getFilter());
+        return commentRepository.save(comment);
+    }
 }
 

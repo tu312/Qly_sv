@@ -50,4 +50,10 @@ public class CommentController {
         return commentService.showTopComment();
     }
 
+    //admin change filter field in order to add comment to homepage
+    @RequiredRoles(Role.ADMIN)
+    @RequestMapping(value="/changeFilterValue/{commentId}", method = RequestMethod.PUT)
+    public Comment changeFilterValue(@PathVariable("commentId") int commentId, @RequestBody CommentDTO commentDTO){
+        return commentService.changeFilterValue(commentId, commentDTO);
+    }
 }
