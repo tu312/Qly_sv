@@ -38,13 +38,6 @@ public class UserController {
     }
 
     //create multi student
-//    @RequiredRoles(Role.ADMIN)
-//    @RequestMapping(value="/createStudent",method = RequestMethod.POST)
-//    public createStudent(@RequestBody List<HashMap<String, String>> wrapCreateStudentDTO) {
-//        userService.createStudent(wrapCreateStudentDTO);
-//    }
-
-    //create multi student
     @RequiredRoles(Role.ADMIN)
     @RequestMapping(value="/createStudent", method = RequestMethod.POST)
     public void createStudent(@RequestBody List<CreateStudentDTO> List){
