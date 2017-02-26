@@ -54,26 +54,30 @@ public class CommentService {
         User user = userRepository.findByToken(token);
         Student student = user.getStudent();
         if (student.getComment() == null ){
-            if (commentDTO.getRating()>0 && commentDTO.getRating()<=5) {
-                Comment comment = new Comment();
-                comment.setContent(commentDTO.getContent());
-                comment.setRating(commentDTO.getRating());
-                comment.setPartnerId(partnerId);
-                student.setComment(comment);
-                Partner partner = partnerRepository.findOne(partnerId);
-                PartnerInfo partnerInfo = partner.getPartnerInfo();
-                if (partnerInfo.getTotalRating() == null) {
-                    partnerInfo.setTotalRating(1);
+            if (commentDTO.getRating() != null && commentDTO.getContent()!=null) {
+                if (commentDTO.getRating() > 0 && commentDTO.getRating() <= 5) {
+                    Comment comment = new Comment();
+                    comment.setContent(commentDTO.getContent());
+                    comment.setRating(commentDTO.getRating());
+                    comment.setPartnerId(partnerId);
+                    student.setComment(comment);
+                    Partner partner = partnerRepository.findOne(partnerId);
+                    PartnerInfo partnerInfo = partner.getPartnerInfo();
+                    if (partnerInfo.getTotalRating() == null) {
+                        partnerInfo.setTotalRating(1);
+                    } else {
+                        int totalRating;
+                        totalRating = partnerInfo.getTotalRating();
+                        totalRating++;
+                        partnerInfo.setTotalRating(totalRating);
+                    }
+                    partnerInfoRepository.save(partnerInfo);
+                    return commentRepository.save(comment);
                 } else {
-                    int totalRating;
-                    totalRating = partnerInfo.getTotalRating();
-                    totalRating++;
-                    partnerInfo.setTotalRating(totalRating);
+                    throw new NullPointerException("Rating value must be between 1 and 5.");
                 }
-                partnerInfoRepository.save(partnerInfo);
-                return commentRepository.save(comment);
             } else {
-                throw new NullPointerException("Error rating.");
+                throw new NullPointerException("Missing Information. Please write a review and rate this partner.")
             }
         } else {
             throw new NullPointerException("This user has already commented for this partner.");
