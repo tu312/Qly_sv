@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends CrudRepository<Comment, Integer>{
     List<Comment> findByPartnerId(int partnerId);
+    List<Comment> findByFilterNotLike(int filter);
 }

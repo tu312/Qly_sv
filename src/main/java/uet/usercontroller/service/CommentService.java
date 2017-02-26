@@ -54,27 +54,36 @@ public class CommentService {
         User user = userRepository.findByToken(token);
         Student student = user.getStudent();
         if (student.getComment() == null ){
-            Comment comment = new Comment();
-            comment.setContent(commentDTO.getContent());
-            comment.setRating(commentDTO.getRating());
-            // them kiem tra neu rating > 10 thi ko luu
-            comment.setPartnerId(partnerId);
-            student.setComment(comment);
-            Partner partner = partnerRepository.findOne(partnerId);
-            PartnerInfo partnerInfo = partner.getPartnerInfo();
-            if (partnerInfo.getTotalRating() == null){
-                partnerInfo.setTotalRating(1);
+            if (commentDTO.getRating()>0 && commentDTO.getRating()<=5) {
+                Comment comment = new Comment();
+                comment.setContent(commentDTO.getContent());
+                comment.setRating(commentDTO.getRating());
+                comment.setPartnerId(partnerId);
+                student.setComment(comment);
+                Partner partner = partnerRepository.findOne(partnerId);
+                PartnerInfo partnerInfo = partner.getPartnerInfo();
+                if (partnerInfo.getTotalRating() == null) {
+                    partnerInfo.setTotalRating(1);
+                } else {
+                    int totalRating;
+                    totalRating = partnerInfo.getTotalRating();
+                    totalRating++;
+                    partnerInfo.setTotalRating(totalRating);
+                }
+                partnerInfoRepository.save(partnerInfo);
+                return commentRepository.save(comment);
             } else {
-                int totalRating;
-                totalRating = partnerInfo.getTotalRating();
-                totalRating++;
-                partnerInfo.setTotalRating(totalRating);
+                throw new NullPointerException("Error rating.");
             }
-            partnerInfoRepository.save(partnerInfo);
-            return  commentRepository.save(comment);
         } else {
             throw new NullPointerException("This user has already commented for this partner.");
         }
+    }
+
+    //show 5 top comment to homepage
+    public List<Comment> showTopComment(){
+        List<Comment> topComment = (List<Comment>) commentRepository.findByFilterNotLike(0);
+        return topComment;
     }
 }
 

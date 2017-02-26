@@ -43,4 +43,11 @@ public class CommentController {
         return commentService.writeComment(partnerId, commentDTO, token);
     }
 
+    //show 5 comments to homepage which are filtered by admin ( filter field != null )
+    @RequiredRoles({Role.ADMIN, Role.VIP_PARTNER, Role.STUDENT, Role.NORMAL_PARTNER, Role.OTHER_PARTNER})
+    @RequestMapping(value="/showTopComment", method = RequestMethod.GET)
+    public List<Comment> showTopComment(){
+        return commentService.showTopComment();
+    }
+
 }
