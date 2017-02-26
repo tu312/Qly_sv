@@ -96,5 +96,10 @@ public class CommentService {
         comment.setFilter(commentDTO.getFilter());
         return commentRepository.save(comment);
     }
+
+    public Comment checkComment(int studentId) {
+        Student student = studentRepository.findById(studentId);
+        return student.getComment();
+    }
 }
 

@@ -56,4 +56,12 @@ public class CommentController {
     public Comment changeFilterValue(@PathVariable("commentId") int commentId, @RequestBody CommentDTO commentDTO){
         return commentService.changeFilterValue(commentId, commentDTO);
     }
+
+    //check comment
+    @RequiredRoles({Role.STUDENT, Role.ADMIN})
+    @RequestMapping(value="/student/{studentId}/checkComment", method = RequestMethod.GET)
+    public Comment checkComment(@PathVariable("studentId") int studentId){
+        return commentService.checkComment(studentId);
+    }
+
 }
