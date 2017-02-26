@@ -3,6 +3,8 @@ package uet.usercontroller.model;
 import javax.persistence.*;
 import java.util.Date;
 import java.sql.Blob;
+import java.util.List;
+import java.util.Set;
 import javax.persistence.Lob;
 
 /**
@@ -21,6 +23,18 @@ public class Post {
     private String describePost;
     private String image;
     private String status;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name="post_hashtag", joinColumns = @JoinColumn(name="post_id",referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name="hashtag_id", referencedColumnName = "id"))
+    private List<Hashtag> hashtags;
+
+    public List<Hashtag> getHashtags() {
+        return hashtags;
+    }
+
+    public void setHashtags(List<Hashtag> hashtags) {
+        this.hashtags = hashtags;
+    }
 
     public int getId() {
         return id;
