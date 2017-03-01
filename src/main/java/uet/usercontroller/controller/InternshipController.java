@@ -28,7 +28,7 @@ public class InternshipController {
     }
 
     //show all Internship of a partner
-    @RequiredRoles({Role.ADMIN,Role.VIP_PARTNER})
+    @RequiredRoles({Role.ADMIN,Role.VIP_PARTNER, Role.NORMAL_PARTNER})
     @RequestMapping(value= "/partner/{partnerId}/internship", method = RequestMethod.GET)
     public List<Internship> getAllInPartner(@PathVariable int partnerId, HttpServletRequest request){
         String token= request.getHeader("auth-token");
@@ -38,12 +38,21 @@ public class InternshipController {
     //Create a Internship
     @RequiredRoles({Role.ADMIN})
     @RequestMapping(value = "/student/{studentId}/{partnerId}/intern", method = RequestMethod.POST)
-    public Internship createIntern(@PathVariable("studentId") int studentId,@PathVariable("partnerId") int partnerId,@RequestBody InternshipDTO internshipDTO,HttpServletRequest request) {
+    public Internship createIntern(@PathVariable("studentId") int studentId,@PathVariable("partnerId") int partnerId,
+                                   @RequestBody InternshipDTO internshipDTO,HttpServletRequest request) {
         String token = request.getHeader("auth-token");
         return internshipService.createIntern(studentId,partnerId,internshipDTO,token);
     }
 
-    //find a internship
+    //create internship from excel
+    @RequiredRoles({Role.ADMIN,Role.VIP_PARTNER})
+    @RequestMapping(value="/partner/createInternship", method = RequestMethod.PUT)
+    public void createInternship(@RequestBody List<InternshipDTO> List, HttpServletRequest request){
+        String token= request.getHeader("auth-token");
+        internshipService.createMultiInternship(List, token);
+    }
+
+    //find student by internId
     @RequiredRoles({Role.ADMIN,Role.VIP_PARTNER,Role.STUDENT})
     @RequestMapping(value = "/intern/{internId}", method = RequestMethod.GET)
     public Internship findInternById(@PathVariable("internId") int id,HttpServletRequest request) {
@@ -53,7 +62,8 @@ public class InternshipController {
     //Edit a internship
     @RequiredRoles({Role.ADMIN})
     @RequestMapping(value = "/intern/{internId}", method = RequestMethod.PUT)
-    public Internship changeInternById(@PathVariable("internId") int id, @RequestBody InternshipDTO internshipDTO, HttpServletRequest request) {
+    public Internship changeInternById(@PathVariable("internId") int id, @RequestBody InternshipDTO internshipDTO,
+                                       HttpServletRequest request) {
         String token = request.getHeader("auth-token");
         return internshipService.changeById(id,internshipDTO,token);
     }

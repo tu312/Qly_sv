@@ -10,4 +10,5 @@ import uet.usercontroller.model.Internship;
 @Repository
 public interface InternshipRepository extends CrudRepository<Internship,Integer>{
     Internship findById(int id);
+//    Internship findByStudentId(int studentId);
 }
