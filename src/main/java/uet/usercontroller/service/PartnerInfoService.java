@@ -198,7 +198,7 @@ public class PartnerInfoService {
         FileOutputStream osf = new FileOutputStream(of);
         osf.write(btDataFile);
         osf.flush();
-        partnerInfo.setLogo("http://localhost:8000/" + directoryName + username + "_logo.jpg");
+        partnerInfo.setLogo("http://128.199.155.163:8000/" + directoryName + username + "_logo.jpg");
         partnerInfoRepository.save(partnerInfo);
     }
 
