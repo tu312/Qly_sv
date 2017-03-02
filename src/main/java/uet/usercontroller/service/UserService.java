@@ -34,6 +34,20 @@ public class UserService {
     @Autowired
     AdminNotificationRepository adminNotificationRepository;
 
+    private User login (UserDTO userDTO, User user){
+        if (userDTO.getPassword().equals(user.getPassword())) {
+            if (user.getToken() == null) {
+                user.setToken(UUID.randomUUID().toString());
+                user.setExpiryTime(new Date(System.currentTimeMillis() + 1000 * 60 * 15));
+            } else {
+                user.setExpiryTime(new Date(System.currentTimeMillis() + 1000 * 60 * 15));
+            }
+            return userRepository.save(user);
+        } else{
+            throw new NullPointerException("Wrong password.");
+        }
+    }
+
     //Show all user
     public List<User> getUsers(){
         List<User> allUsers = (List<User>) userRepository.findAll();
@@ -116,17 +130,7 @@ public class UserService {
     public User Login(UserDTO userDTO){
         User user = userRepository.findByUserName(userDTO.getUserName());
         if (user.getStatus().equals("A")) {
-            if (userDTO.getPassword().equals(user.getPassword())) {
-                if (user.getToken() == null) {
-                    user.setToken(UUID.randomUUID().toString());
-                    user.setExpiryTime(new Date(System.currentTimeMillis() + 1000 * 60 * 15));
-                } else {
-                    user.setExpiryTime(new Date(System.currentTimeMillis() + 1000 * 60 * 15));
-                }
-                return userRepository.save(user);
-            } else {
-                throw new NullPointerException("Wrong password.");
-            }
+            return this.login(userDTO, user);
         } else if (userDTO.getStatus().equals("D")) {
             throw new NullPointerException("Account was deactivated.");
         } else {
@@ -139,15 +143,7 @@ public class UserService {
     public User adminLogin (UserDTO userDTO){
         User user = userRepository.findByUserName(userDTO.getUserName());
         if ( user.getRole() == Role.ADMIN ) {
-            if (userDTO.getPassword().equals(user.getPassword())) {
-                if (user.getToken() == null) {
-                    user.setToken(UUID.randomUUID().toString());
-                    user.setExpiryTime(new Date(System.currentTimeMillis() + 1000 * 60 * 15));
-                } else {
-                    user.setExpiryTime(new Date(System.currentTimeMillis() + 1000 * 60 * 15));
-                }
-            }
-            return userRepository.save(user);
+            return this.login(userDTO, user);
         }
         else {
             throw new NullPointerException("Account is not an admin account.");
