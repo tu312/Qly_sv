@@ -26,15 +26,13 @@
             <url>https://repo.spring.io/libs-release</url>
         </pluginRepository>
     </pluginRepositories>
-
-    <plugins>
         <plugin>
             <configuration>
                 <executable>true</executable>
                 <jvmArguments>-Dfile.encoding=UTF8</jvmArguments>
             </configuration>
         </plugin>
-    </plugins>
+
 
 
 
