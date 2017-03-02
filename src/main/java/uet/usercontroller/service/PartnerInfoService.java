@@ -9,6 +9,7 @@ import uet.usercontroller.repository.PartnerInfoRepository;
 import uet.usercontroller.repository.PartnerRepository;
 import uet.usercontroller.repository.UserRepository;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -193,7 +194,7 @@ public class PartnerInfoService {
         if (! directory.exists()) {
             directory.mkdir();
         }
-        byte[] btDataFile = new sun.misc.BASE64Decoder().decodeBuffer(partnerInfoDTO.getLogo());
+        byte[] btDataFile = DatatypeConverter.parseBase64Binary(partnerInfoDTO.getLogo());
         File of = new File( pathname + fileName);
         FileOutputStream osf = new FileOutputStream(of);
         osf.write(btDataFile);
