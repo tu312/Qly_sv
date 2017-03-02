@@ -1,9 +1,6 @@
 package uet.usercontroller.model;
 
-
-import sun.util.calendar.BaseCalendar;
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * Created by root on 7/20/16.

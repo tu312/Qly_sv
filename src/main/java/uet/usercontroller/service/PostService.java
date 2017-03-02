@@ -10,6 +10,7 @@ import uet.usercontroller.repository.PartnerRepository;
 import uet.usercontroller.repository.PostRepository;
 import uet.usercontroller.repository.UserRepository;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -80,7 +81,7 @@ public class PostService {
             }
             String directoryName = "users_data/partner/" + username + "/post/" + String.valueOf(post.getId()) + "/";
             String fileName = username + "_" + String.valueOf(post.getId()) + ".jpg";
-            byte[] btDataFile = new sun.misc.BASE64Decoder().decodeBuffer(postDTO.getImage());
+            byte[] btDataFile = DatatypeConverter.parseBase64Binary(postDTO.getImage());
             File of = new File( pathname + fileName);
             FileOutputStream osf = new FileOutputStream(of);
             osf.write(btDataFile);
@@ -144,7 +145,7 @@ public class PostService {
             String pathname = "../Qly_SV_client/app/users_data/tmp/";
             String directoryName = "users_data/tmp/";
             String fileName = username + "_" + ".jpg";
-            byte[] btDataFile = new sun.misc.BASE64Decoder().decodeBuffer(postDTO.getImage());
+            byte[] btDataFile = DatatypeConverter.parseBase64Binary(postDTO.getImage());
             File of = new File( pathname + fileName);
             FileOutputStream osf = new FileOutputStream(of);
             osf.write(btDataFile);
