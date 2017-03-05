@@ -86,7 +86,7 @@ public class PostService {
             FileOutputStream osf = new FileOutputStream(of);
             osf.write(btDataFile);
             osf.flush();
-            String result = "http://http://112.137.130.47:8000/" + directoryName + fileName;
+            String result = "http://112.137.130.47:8000/" + directoryName + fileName;
             post.setImage(result);
            return postRepository.save(post);
         }
@@ -150,7 +150,7 @@ public class PostService {
             FileOutputStream osf = new FileOutputStream(of);
             osf.write(btDataFile);
             osf.flush();
-            String result = "http://localhost:8000/" + directoryName + fileName;
+            String result = "http://112.137.130.47:8000/" + directoryName + fileName;
             post.setImage(result);
             return post;
         }

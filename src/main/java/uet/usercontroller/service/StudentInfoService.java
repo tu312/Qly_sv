@@ -157,7 +157,7 @@ public class StudentInfoService {
         FileOutputStream osf = new FileOutputStream(of);
         osf.write(btDataFile);
         osf.flush();
-        studentInfo.setAvatar("http://http://112.137.130.47:8000/" + directoryName + username + "_avatar.jpg");
+        studentInfo.setAvatar("http://112.137.130.47:8000/" + directoryName + username + "_avatar.jpg");
         studentInfoRepository.save(studentInfo);
     }
 
