@@ -14,6 +14,9 @@ public class PartnerContactDTO {
     private String address;
     private String skype;
     private String email;
+    private String phone;
+    private String about;
+    private String avatar;
 
     public int getId() {
         return id;
@@ -53,5 +56,29 @@ public class PartnerContactDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

@@ -21,6 +21,7 @@ public class Post {
     private String describePost;
     private String image;
     private String status;
+    private Integer requiredNumber;
 
     public int getId() {
         return id;
@@ -66,5 +67,13 @@ public class Post {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getRequiredNumber() {
+        return requiredNumber;
+    }
+
+    public void setRequiredNumber(Integer requiredNumber) {
+        this.requiredNumber = requiredNumber;
     }
 }

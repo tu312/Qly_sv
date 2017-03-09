@@ -48,6 +48,10 @@ public class JobSkillService {
             jobSkill.setSkill(jobSkillDTO.getSkill());
             jobSkill.setUpdateTime(jobSkillDTO.getUpdateTime());
             jobSkill.setStudentId(studentId);
+            jobSkill.setStartDate(jobSkillDTO.getStartDate());
+            jobSkill.setEndDate(jobSkillDTO.getEndDate());
+            jobSkill.setAbout(jobSkillDTO.getAbout());
+            jobSkill.setRating(jobSkillDTO.getRating());
             return jobSkillRepository.save(jobSkill);
 
         }
@@ -72,6 +76,10 @@ public class JobSkillService {
             jobSkill.setCompany(jobSkillDTO.getCompany());
             jobSkill.setUpdateTime(jobSkillDTO.getUpdateTime());
             jobSkill.setSkill(jobSkillDTO.getSkill());
+            jobSkill.setStartDate(jobSkillDTO.getStartDate());
+            jobSkill.setEndDate(jobSkillDTO.getEndDate());
+            jobSkill.setAbout(jobSkillDTO.getAbout());
+            jobSkill.setRating(jobSkillDTO.getRating());
             return jobSkillRepository.save(jobSkill);
         }
         else {
@@ -99,4 +107,3 @@ public class JobSkillService {
         }
     }
 }
-

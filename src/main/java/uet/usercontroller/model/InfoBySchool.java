@@ -13,21 +13,13 @@ public class InfoBySchool {
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @Column(name="studentCode")
     private Integer studentCode;
-    @Column(name="major")
     private String major;
-    @Column(name="studentClass")
     private String studentClass;
-    @Column(name="GPA")
     private Double GPA;
-    @Column(name="diploma")
     private String diploma;
-    @Column(name="grade")
     private String grade;
-    @Column(name="graduationYear")
     private String graduationYear;
-    @Column(name="studentName")
     private String studentName;
 
     public int getId() {
