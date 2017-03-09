@@ -83,9 +83,6 @@ public class StudentInfoService {
         String username = user.getUserName();
         StudentInfo studentinfo = studentInfoRepository.findOne(id);
         if (student.getStudentInfo().equals(studentinfo)){
-            if (studentInfoDTO.getFullName()!=null) {
-                studentinfo.setFullName(studentInfoDTO.getFullName());
-            }
             if (studentInfoDTO.getBirthday()!=null){
                 studentinfo.setBirthday(studentInfoDTO.getBirthday());
             }
