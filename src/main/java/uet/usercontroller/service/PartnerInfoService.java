@@ -241,6 +241,7 @@ public class PartnerInfoService {
             lPartnerInfo.put("partnerName", partnerName);
             lPartnerInfo.put("logo", logo);
             lPartnerInfo.put("partnerInfoId",String.valueOf(partnerInfoId));
+            lPartnerInfo.put("partnerId",String.valueOf(partner.getId()));
             listPartnerInfo.add(lPartnerInfo);
         }
         return listPartnerInfo;
