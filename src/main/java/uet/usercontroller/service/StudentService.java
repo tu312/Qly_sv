@@ -34,25 +34,47 @@ public class StudentService {
     @Autowired
     InfoBySchoolRepository infoBySchoolRepository;
     //Show all student information
-    public List<HashMap<String, String>> getAllInfo(){
+    public List<HashMap<String, String>> getAllInfo(String token){
         List<InfoBySchool> allInfoBySchool = (List<InfoBySchool>) infoBySchoolRepository.findAll();
         List<HashMap<String, String>> listPartnerInfo = new ArrayList<HashMap<String, String>>();
-        for (InfoBySchool infoBySchool : allInfoBySchool){
-            HashMap<String, String> lInfoBySChool = new HashMap<String, String>();
-            Student student = studentRepository.findByStudentInfoId(infoBySchool.getId());
-            User user = userRepository.findByStudentId(student.getId());
-            lInfoBySChool.put("userId", String.valueOf(user.getId()));
-            lInfoBySChool.put("status", user.getStatus());
-            lInfoBySChool.put("studentName", infoBySchool.getStudentName());
-            lInfoBySChool.put("infoBySchoolId", String.valueOf(infoBySchool.getId()));
-            lInfoBySChool.put("gpa", String.valueOf(infoBySchool.getGPA()));
-            lInfoBySChool.put("diploma", infoBySchool.getDiploma());
-            lInfoBySChool.put("grade", infoBySchool.getGrade());
-            lInfoBySChool.put("graduationYear", infoBySchool.getGraduationYear());
-            lInfoBySChool.put("major", infoBySchool.getMajor());
-            lInfoBySChool.put("studentClass", infoBySchool.getStudentClass());
-            lInfoBySChool.put("studentCode", String.valueOf(infoBySchool.getStudentCode()));
-            listPartnerInfo.add(lInfoBySChool);
+        User checkUser = userRepository.findByToken(token);
+        if (checkUser.getRole()==Role.VIP_PARTNER) {
+            for (InfoBySchool infoBySchool : allInfoBySchool) {
+                Student student = studentRepository.findByStudentInfoId(infoBySchool.getId());
+                User user = userRepository.findByStudentIdAndStatus(student.getId(), "A");
+                HashMap<String, String> lInfoBySChool = new HashMap<String, String>();
+                lInfoBySChool.put("userId", String.valueOf(user.getId()));
+                lInfoBySChool.put("status", user.getStatus());
+                lInfoBySChool.put("studentName", infoBySchool.getStudentName());
+                lInfoBySChool.put("infoBySchoolId", String.valueOf(infoBySchool.getId()));
+                lInfoBySChool.put("gpa", String.valueOf(infoBySchool.getGPA()));
+                lInfoBySChool.put("diploma", infoBySchool.getDiploma());
+                lInfoBySChool.put("grade", infoBySchool.getGrade());
+                lInfoBySChool.put("graduationYear", infoBySchool.getGraduationYear());
+                lInfoBySChool.put("major", infoBySchool.getMajor());
+                lInfoBySChool.put("studentClass", infoBySchool.getStudentClass());
+                lInfoBySChool.put("studentCode", String.valueOf(infoBySchool.getStudentCode()));
+                listPartnerInfo.add(lInfoBySChool);
+            }
+        }
+        if (checkUser.getRole()==Role.ADMIN){
+            for (InfoBySchool infoBySchool : allInfoBySchool) {
+                Student student = studentRepository.findByStudentInfoId(infoBySchool.getId());
+                User user = userRepository.findByStudentId(student.getId());
+                HashMap<String, String> lInfoBySChool = new HashMap<String, String>();
+                lInfoBySChool.put("userId", String.valueOf(user.getId()));
+                lInfoBySChool.put("status", user.getStatus());
+                lInfoBySChool.put("studentName", infoBySchool.getStudentName());
+                lInfoBySChool.put("infoBySchoolId", String.valueOf(infoBySchool.getId()));
+                lInfoBySChool.put("gpa", String.valueOf(infoBySchool.getGPA()));
+                lInfoBySChool.put("diploma", infoBySchool.getDiploma());
+                lInfoBySChool.put("grade", infoBySchool.getGrade());
+                lInfoBySChool.put("graduationYear", infoBySchool.getGraduationYear());
+                lInfoBySChool.put("major", infoBySchool.getMajor());
+                lInfoBySChool.put("studentClass", infoBySchool.getStudentClass());
+                lInfoBySChool.put("studentCode", String.valueOf(infoBySchool.getStudentCode()));
+                listPartnerInfo.add(lInfoBySChool);
+            }
         }
         return listPartnerInfo;
     }

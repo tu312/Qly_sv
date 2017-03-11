@@ -23,13 +23,17 @@ public class PostController {
     //Show all post
     @RequiredRoles({Role.ADMIN,Role.STUDENT})
     @RequestMapping(value="/post",method= RequestMethod.GET)
-    public List<Post> getAllPosts() { return postService.getAllPosts();}
+    public List<Post> getAllPosts(HttpServletRequest request) {
+        String token = request.getHeader("auth-token");
+        return postService.getAllPosts(token);
+    }
 
     //Show list post of a partner
-    @RequiredRoles({Role.ADMIN,Role.VIP_PARTNER,Role.STUDENT})
+    @RequiredRoles({Role.ADMIN,Role.STUDENT})
     @RequestMapping(value="/partner/{partnerId}/post",method = RequestMethod.GET)
-    public List<Post> showAllPost(@PathVariable("partnerId") int partnerId){
-        return postService.showAllPost(partnerId);
+    public List<Post> showAllPost(@PathVariable("partnerId") int partnerId, HttpServletRequest request){
+        String token = request.getHeader("auth-token");
+        return postService.showAllPost(partnerId, token);
     }
 
     //Show a post

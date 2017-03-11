@@ -1,5 +1,6 @@
 package uet.usercontroller.repository;
 
+import javafx.geometry.Pos;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -19,4 +20,9 @@ public interface PostRepository extends CrudRepository<Post,Integer>, PagingAndS
     List<Post> findByDescribePostContaining(String describePost);
 
     List<Post> findByContentContaining(String content);
+
+    List<Post> findByStatus(String status);
+
+    List<Post> findByPartnerIdAndStatus(int partnerId, String status);
+
 }

@@ -34,15 +34,35 @@ public class PostService {
     private FollowRepository followRepository;
 
     //show all post
-    public List<Post> getAllPosts(){
-        List<Post> allPosts = (List<Post>) postRepository.findAll();
-        return allPosts;
+    public List<Post> getAllPosts(String token){
+        User user = userRepository.findByToken(token);
+        if (user.getRole()==Role.ADMIN) {
+            List<Post> allPosts = (List<Post>) postRepository.findAll();
+            return allPosts;
+        }
+        else if (user.getRole()==Role.STUDENT){
+            List<Post> allActivePosts = (List<Post>) postRepository.findByStatus("A");
+            return allActivePosts;
+        }
+        else {
+            throw new NullPointerException("Error.");
+        }
+
+
     }
 
     //show list post of a partner
-    public List<Post> showAllPost(int partnerId) {
-        Partner partner = partnerRepository.findById(partnerId);
-        return partner.getPost();
+    public List<Post> showAllPost(int partnerId, String token) {
+        User user = userRepository.findByToken(token);
+        if (user.getRole()==Role.ADMIN) {
+            Partner partner = partnerRepository.findById(partnerId);
+            return partner.getPost();
+        }
+        else if (user.getRole()==Role.STUDENT){
+            return postRepository.findByPartnerIdAndStatus(partnerId, "A");
+        } else{
+            throw new NullPointerException("Error.");
+        }
     }
 
     //show a post
@@ -61,6 +81,7 @@ public class PostService {
             post.setDatePost(postDTO.getDatePost());
             post.setDescribePost(postDTO.getDescribePost());
             post.setPartnerId(partnerId);
+            post.setRequiredNumber(postDTO.getRequiredNumber());
             if ( user.getRole() == Role.VIP_PARTNER){
                 post.setStatus("A");
             } else if (user.getRole() == Role.NORMAL_PARTNER){
@@ -110,6 +131,9 @@ public class PostService {
             }
             if (postDTO.getDescribePost()!=null){
                 post.setDescribePost(postDTO.getDescribePost());
+            }
+            if (postDTO.getRequiredNumber()!=null){
+                post.setRequiredNumber(postDTO.getRequiredNumber());
             }
             return postRepository.save(post);
         }
