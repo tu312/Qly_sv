@@ -39,7 +39,7 @@ public class FollowController {
     }
 
     //check follow
-    @RequiredRoles({Role.STUDENT})
+    @RequiredRoles({Role.STUDENT, Role.VIP_PARTNER})
     @RequestMapping(value="/post/{postId}/student/{studentId}/checkFollow",method = RequestMethod.PUT)
     public Follow checkFollow(@PathVariable("postId") int postId, @PathVariable("studentId") int studentId, HttpServletRequest request){
         String token =request.getHeader("auth-token");
