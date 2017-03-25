@@ -2,6 +2,8 @@ package uet.usercontroller.service;
 
 //import com.sun.jmx.snmp.Timestamp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uet.usercontroller.DTO.PostDTO;
 import uet.usercontroller.model.*;
@@ -34,21 +36,19 @@ public class PostService {
     private FollowRepository followRepository;
 
     //show all post
-    public List<Post> getAllPosts(String token){
+    public Page<Post> getAllPosts(String token, Pageable pageable) {
         User user = userRepository.findByToken(token);
         if (user.getRole()==Role.ADMIN) {
-            List<Post> allPosts = (List<Post>) postRepository.findAll();
+            Page<Post> allPosts = (Page<Post>) postRepository.findAllByOrderByIdDesc(pageable);
             return allPosts;
         }
         else if (user.getRole()==Role.STUDENT){
-            List<Post> allActivePosts = (List<Post>) postRepository.findByStatus("A");
+            Page<Post> allActivePosts = (Page<Post>) postRepository.findAllByStatusOrderByIdDesc("A", pageable);
             return allActivePosts;
         }
         else {
             throw new NullPointerException("Error.");
         }
-
-
     }
 
     //show list post of a partner
@@ -58,7 +58,7 @@ public class PostService {
             Partner partner = partnerRepository.findById(partnerId);
             return partner.getPost();
         }
-        else if (user.getRole()==Role.STUDENT){
+        else if (user.getRole()==Role.STUDENT || user.getRole() == Role.VIP_PARTNER){
             return postRepository.findByPartnerIdAndStatus(partnerId, "A");
         } else{
             throw new NullPointerException("Error.");
