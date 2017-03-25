@@ -42,28 +42,17 @@ public class StudentInfoService {
             HashMap<String, String> lStudentInfo = new HashMap<String, String>();
             Student student = studentRepository.findByStudentInfoId(studentInfo.getId());
             User user = userRepository.findByStudentId(student.getId());
-            String userId = String.valueOf(user.getId());
-            String status = user.getStatus();
-            String studentInfoId = String.valueOf(studentInfo.getId());
-            String address = studentInfo.getAddress();
-            String avatar = studentInfo.getAvatar();
-            String birthday = studentInfo.getEmail();
-            String desire = studentInfo.getDesire();
-            String email = studentInfo.getEmail();
-            String fullName = studentInfo.getFullName();
-            String phoneNumber = studentInfo.getPhoneNumber();
-            String skype = studentInfo.getSkype();
-            lStudentInfo.put("userId", userId);
-            lStudentInfo.put("status", status);
-            lStudentInfo.put("studentInfoId", studentInfoId);
-            lStudentInfo.put("address", address);
-            lStudentInfo.put("avatar", avatar);
-            lStudentInfo.put("birthday", birthday);
-            lStudentInfo.put("desire", desire);
-            lStudentInfo.put("email", email);
-            lStudentInfo.put("fullName", fullName);
-            lStudentInfo.put("phoneNumber", phoneNumber);
-            lStudentInfo.put("skype", skype);
+            lStudentInfo.put("userId", String.valueOf(user.getId()));
+            lStudentInfo.put("status", user.getStatus());
+            lStudentInfo.put("studentInfoId", String.valueOf(studentInfo.getId()));
+            lStudentInfo.put("address", studentInfo.getAddress());
+            lStudentInfo.put("avatar", studentInfo.getAvatar());
+            lStudentInfo.put("birthday", studentInfo.getBirthday());
+            lStudentInfo.put("desire", studentInfo.getDesire());
+            lStudentInfo.put("email", studentInfo.getEmail());
+            lStudentInfo.put("fullName", studentInfo.getFullName());
+            lStudentInfo.put("phoneNumber", studentInfo.getPhoneNumber());
+            lStudentInfo.put("skype", studentInfo.getSkype());
             listPartnerInfo.add(lStudentInfo);
         }
         return listPartnerInfo;
@@ -94,9 +83,6 @@ public class StudentInfoService {
         String username = user.getUserName();
         StudentInfo studentinfo = studentInfoRepository.findOne(id);
         if (student.getStudentInfo().equals(studentinfo)){
-            if (studentInfoDTO.getFullName()!=null) {
-                studentinfo.setFullName(studentInfoDTO.getFullName());
-            }
             if (studentInfoDTO.getBirthday()!=null){
                 studentinfo.setBirthday(studentInfoDTO.getBirthday());
             }

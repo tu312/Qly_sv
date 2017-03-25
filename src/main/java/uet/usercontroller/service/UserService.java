@@ -2,6 +2,7 @@ package uet.usercontroller.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uet.usercontroller.DTO.ChangePasswordDTO;
 import uet.usercontroller.DTO.CreateStudentDTO;
 import uet.usercontroller.DTO.UserDTO;
 import uet.usercontroller.model.*;
@@ -230,5 +231,16 @@ public class UserService {
                 adminNotificationRepository.save(adminNotification);
             }
         }
+    }
+
+    public User changePassword(ChangePasswordDTO changePasswordDTO, String token) throws Exception {
+        User user = userRepository.findByToken(token);
+        if(user.getPassword().equals(changePasswordDTO.getOldPassword())){
+            user.setPassword(changePasswordDTO.getNewPassword());
+            return userRepository.save(user);
+        } else{
+            throw new Exception("Old password is not equal!");
+        }
+
     }
 }
