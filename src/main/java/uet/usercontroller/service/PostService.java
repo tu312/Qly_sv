@@ -2,6 +2,8 @@ package uet.usercontroller.service;
 
 //import com.sun.jmx.snmp.Timestamp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uet.usercontroller.DTO.PostDTO;
 import uet.usercontroller.model.*;
@@ -10,6 +12,7 @@ import uet.usercontroller.repository.PartnerRepository;
 import uet.usercontroller.repository.PostRepository;
 import uet.usercontroller.repository.UserRepository;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,15 +36,33 @@ public class PostService {
     private FollowRepository followRepository;
 
     //show all post
-    public List<Post> getAllPosts(){
-        List<Post> allPosts = (List<Post>) postRepository.findAll();
-        return allPosts;
+    public Page<Post> getAllPosts(String token, Pageable pageable) {
+        User user = userRepository.findByToken(token);
+        if (user.getRole()==Role.ADMIN) {
+            Page<Post> allPosts = (Page<Post>) postRepository.findAllByOrderByIdDesc(pageable);
+            return allPosts;
+        }
+        else if (user.getRole()==Role.STUDENT){
+            Page<Post> allActivePosts = (Page<Post>) postRepository.findAllByStatusOrderByIdDesc("A", pageable);
+            return allActivePosts;
+        }
+        else {
+            throw new NullPointerException("Error.");
+        }
     }
 
     //show list post of a partner
-    public List<Post> showAllPost(int partnerId) {
-        Partner partner = partnerRepository.findById(partnerId);
-        return partner.getPost();
+    public List<Post> showAllPost(int partnerId, String token) {
+        User user = userRepository.findByToken(token);
+        if (user.getRole()==Role.ADMIN) {
+            Partner partner = partnerRepository.findById(partnerId);
+            return partner.getPost();
+        }
+        else if (user.getRole()==Role.STUDENT || user.getRole() == Role.VIP_PARTNER){
+            return postRepository.findByPartnerIdAndStatus(partnerId, "A");
+        } else{
+            throw new NullPointerException("Error.");
+        }
     }
 
     //show a post
@@ -60,6 +81,7 @@ public class PostService {
             post.setDatePost(postDTO.getDatePost());
             post.setDescribePost(postDTO.getDescribePost());
             post.setPartnerId(partnerId);
+            post.setRequiredNumber(postDTO.getRequiredNumber());
             if ( user.getRole() == Role.VIP_PARTNER){
                 post.setStatus("A");
             } else if (user.getRole() == Role.NORMAL_PARTNER){
@@ -80,7 +102,7 @@ public class PostService {
             }
             String directoryName = "users_data/partner/" + username + "/post/" + String.valueOf(post.getId()) + "/";
             String fileName = username + "_" + String.valueOf(post.getId()) + ".jpg";
-            byte[] btDataFile = new sun.misc.BASE64Decoder().decodeBuffer(postDTO.getImage());
+            byte[] btDataFile = DatatypeConverter.parseBase64Binary(postDTO.getImage());
             File of = new File( pathname + fileName);
             FileOutputStream osf = new FileOutputStream(of);
             osf.write(btDataFile);
@@ -109,6 +131,9 @@ public class PostService {
             }
             if (postDTO.getDescribePost()!=null){
                 post.setDescribePost(postDTO.getDescribePost());
+            }
+            if (postDTO.getRequiredNumber()!=null){
+                post.setRequiredNumber(postDTO.getRequiredNumber());
             }
             return postRepository.save(post);
         }
@@ -144,7 +169,7 @@ public class PostService {
             String pathname = "../Qly_SV_client/app/users_data/tmp/";
             String directoryName = "users_data/tmp/";
             String fileName = username + "_" + ".jpg";
-            byte[] btDataFile = new sun.misc.BASE64Decoder().decodeBuffer(postDTO.getImage());
+            byte[] btDataFile = DatatypeConverter.parseBase64Binary(postDTO.getImage());
             File of = new File( pathname + fileName);
             FileOutputStream osf = new FileOutputStream(of);
             osf.write(btDataFile);

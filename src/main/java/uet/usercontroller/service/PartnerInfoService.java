@@ -9,6 +9,7 @@ import uet.usercontroller.repository.PartnerInfoRepository;
 import uet.usercontroller.repository.PartnerRepository;
 import uet.usercontroller.repository.UserRepository;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -78,34 +79,21 @@ public class PartnerInfoService {
         PartnerInfo partnerInfo = partnerRepository.findById(partnerId).getPartnerInfo();
         User user = userRepository.findByPartnerId(partnerId);
         HashMap<String, String> showPartnerInfo = new HashMap<String, String>();
-        String userId = String.valueOf(user.getId());
-        String status = user.getStatus();
-        String address = partnerInfo.getAddress();
-        String director = partnerInfo.getDirector();
-        String email = partnerInfo.getEmail();
-        String fax = partnerInfo.getFax();
-        String fieldWork = partnerInfo.getFieldWork();
-        String partnerName = partnerInfo.getPartnerName();
-        String phone = partnerInfo.getPhone();
-        String taxCode = partnerInfo.getTaxCode();
-        String website = partnerInfo.getWebsite();
-        String logo = partnerInfo.getLogo();
-        String averageRating = String.valueOf(partnerInfo.getAverageRating());
         showPartnerInfo.put("partnerId", String.valueOf(partnerId));
-        showPartnerInfo.put("userId", userId);
-        showPartnerInfo.put("status", status);
+        showPartnerInfo.put("userId", String.valueOf(user.getId()));
+        showPartnerInfo.put("status", user.getStatus());
         showPartnerInfo.put("partnerInfoId", String.valueOf(partnerInfo.getId()));
-        showPartnerInfo.put("address", address);
-        showPartnerInfo.put("director", director);
-        showPartnerInfo.put("email", email);
-        showPartnerInfo.put("fax", fax);
-        showPartnerInfo.put("fieldWork", fieldWork);
-        showPartnerInfo.put("partnerName", partnerName);
-        showPartnerInfo.put("phone", phone);
-        showPartnerInfo.put("taxCode", taxCode);
-        showPartnerInfo.put("website", website);
-        showPartnerInfo.put("logo", logo);
-        showPartnerInfo.put("averageRating", averageRating);
+        showPartnerInfo.put("address", partnerInfo.getAddress());
+        showPartnerInfo.put("director", partnerInfo.getDirector());
+        showPartnerInfo.put("email", partnerInfo.getEmail());
+        showPartnerInfo.put("fax", partnerInfo.getFax());
+        showPartnerInfo.put("fieldWork", partnerInfo.getFieldWork());
+        showPartnerInfo.put("partnerName", partnerInfo.getPartnerName());
+        showPartnerInfo.put("phone", partnerInfo.getPhone());
+        showPartnerInfo.put("taxCode", partnerInfo.getTaxCode());
+        showPartnerInfo.put("website", partnerInfo.getWebsite());
+        showPartnerInfo.put("logo", partnerInfo.getLogo());
+        showPartnerInfo.put("averageRating", String.valueOf(partnerInfo.getAverageRating()));
         return showPartnerInfo;
     }
 
@@ -193,7 +181,7 @@ public class PartnerInfoService {
         if (! directory.exists()) {
             directory.mkdir();
         }
-        byte[] btDataFile = new sun.misc.BASE64Decoder().decodeBuffer(partnerInfoDTO.getLogo());
+        byte[] btDataFile = DatatypeConverter.parseBase64Binary(partnerInfoDTO.getLogo());
         File of = new File( pathname + fileName);
         FileOutputStream osf = new FileOutputStream(of);
         osf.write(btDataFile);
@@ -253,6 +241,7 @@ public class PartnerInfoService {
             lPartnerInfo.put("partnerName", partnerName);
             lPartnerInfo.put("logo", logo);
             lPartnerInfo.put("partnerInfoId",String.valueOf(partnerInfoId));
+            lPartnerInfo.put("partnerId",String.valueOf(partner.getId()));
             listPartnerInfo.add(lPartnerInfo);
         }
         return listPartnerInfo;

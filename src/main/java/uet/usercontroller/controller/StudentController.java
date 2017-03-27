@@ -23,8 +23,9 @@ public class StudentController {
     //Show all student information by school
     @RequiredRoles({Role.VIP_PARTNER,Role.ADMIN})
     @RequestMapping(value="/student", method = RequestMethod.GET)
-    public List<HashMap<String, String>> getAllInfo(){
-        return (List<HashMap<String, String>>) studentService.getAllInfo();
+    public List<HashMap<String, String>> getAllInfo(HttpServletRequest request){
+        String token = request.getHeader("auth-token");
+        return (List<HashMap<String, String>>) studentService.getAllInfo(token);
     }
 
 //    //Create
@@ -34,7 +35,7 @@ public class StudentController {
 //        return studentService.createStudent(userId, studentDTO);
 //    }
 
-    //Show student
+    //Show a student
     @RequiredRoles({Role.STUDENT,Role.VIP_PARTNER,Role.ADMIN})
     @RequestMapping(value="student/{studentId}",method = RequestMethod.GET)
     public Student findStudent(@PathVariable("studentId") int studentId, HttpServletRequest request) {

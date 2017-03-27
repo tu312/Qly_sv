@@ -53,6 +53,8 @@ public class PartnerContactService {
             partnerContact.setContactName(partnerContactDTO.getContactName());
             partnerContact.setEmail(partnerContactDTO.getEmail());
             partnerContact.setSkype(partnerContactDTO.getSkype());
+            partnerContact.setPhone(partnerContactDTO.getPhone());
+            partnerContact.setAbout(partnerContactDTO.getAbout());
             return partnerContactRepository.save(partnerContact);
         }
         else{
@@ -70,6 +72,8 @@ public class PartnerContactService {
             partnerContact.setContactName(partnerContactDTO.getContactName());
             partnerContact.setEmail(partnerContactDTO.getEmail());
             partnerContact.setSkype(partnerContactDTO.getSkype());
+            partnerContact.setAbout(partnerContactDTO.getAbout());
+            partnerContact.setPhone(partnerContactDTO.getPhone());
             return partnerContactRepository.save(partnerContact);
         }
         else {

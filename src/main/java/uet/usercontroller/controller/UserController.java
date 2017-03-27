@@ -3,6 +3,7 @@ package uet.usercontroller.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import uet.usercontroller.DTO.ChangePasswordDTO;
 import uet.usercontroller.DTO.CreateStudentDTO;
 import uet.usercontroller.DTO.UserDTO;
 import uet.usercontroller.model.Role;
@@ -36,13 +37,6 @@ public class UserController {
     public User createUser(@RequestBody UserDTO userDTO){
         return userService.createUser(userDTO);
     }
-
-    //create multi student
-//    @RequiredRoles(Role.ADMIN)
-//    @RequestMapping(value="/createStudent",method = RequestMethod.POST)
-//    public createStudent(@RequestBody List<HashMap<String, String>> wrapCreateStudentDTO) {
-//        userService.createStudent(wrapCreateStudentDTO);
-//    }
 
     //create multi student
     @RequiredRoles(Role.ADMIN)
@@ -87,6 +81,14 @@ public class UserController {
     public User editUser(@PathVariable("id") int id, @RequestBody UserDTO userDTO, HttpServletRequest request) {
         String token = request.getHeader("auth-token");
         return userService.editUser(id, userDTO, token);
+    }
+
+    // change password
+    @RequiredRoles({Role.ADMIN,Role.STUDENT, Role.VIP_PARTNER})
+    @RequestMapping(value="changePassword", method = RequestMethod.PUT)
+    public User changePassword(@RequestBody ChangePasswordDTO changePasswordDTO, HttpServletRequest request) throws Exception {
+        String token = request.getHeader("auth-token");
+        return userService.changePassword(changePasswordDTO, token);
     }
 
     //activate/deactivate

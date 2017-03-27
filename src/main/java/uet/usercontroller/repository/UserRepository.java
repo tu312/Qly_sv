@@ -17,5 +17,6 @@ public interface UserRepository extends CrudRepository<User, Integer>{
     User findByToken(String token);
     User findByPartnerId(int id);
     User findByStudentId(int id);
+    User findByStudentIdAndStatus(int id, String status);
     List<User> findByRole(Role role);
 }

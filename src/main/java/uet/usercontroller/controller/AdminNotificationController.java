@@ -1,15 +1,14 @@
 package uet.usercontroller.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import uet.usercontroller.DTO.AdminNotificationDTO;
 import uet.usercontroller.model.AdminNotification;
 import uet.usercontroller.model.Role;
 import uet.usercontroller.service.AdminNotificationService;
 import uet.usercontroller.stereotype.RequiredRoles;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -39,5 +38,12 @@ public class AdminNotificationController {
     @RequestMapping(value="/notification/{id}", method = RequestMethod.POST)
     public void removeNotification(@PathVariable("id") int id) {
         notificationService.removeNotification(id);
+    }
+
+    //write report
+    @RequestMapping(value="/report", method = RequestMethod.PUT)
+    public void removeNotification(@RequestBody AdminNotificationDTO adminNotificationDTO, HttpServletRequest request) {
+        String token = request.getHeader("auth-token");
+        notificationService.writeReport(adminNotificationDTO, token);
     }
 }

@@ -1,6 +1,8 @@
 package uet.usercontroller.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import uet.usercontroller.DTO.PostDTO;
 import uet.usercontroller.model.Post;
@@ -20,16 +22,20 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    //Show all post
+    //show all post with pagination
     @RequiredRoles({Role.ADMIN,Role.STUDENT})
     @RequestMapping(value="/post",method= RequestMethod.GET)
-    public List<Post> getAllPosts() { return postService.getAllPosts();}
+    public Page<Post> getAllPosts(HttpServletRequest request, Pageable pageable) {
+        String token = request.getHeader("auth-token");
+        return postService.getAllPosts(token, pageable);
+    }
 
     //Show list post of a partner
-    @RequiredRoles({Role.ADMIN,Role.VIP_PARTNER,Role.STUDENT})
+    @RequiredRoles({Role.ADMIN,Role.STUDENT,Role.VIP_PARTNER})
     @RequestMapping(value="/partner/{partnerId}/post",method = RequestMethod.GET)
-    public List<Post> showAllPost(@PathVariable("partnerId") int partnerId){
-        return postService.showAllPost(partnerId);
+    public List<Post> showAllPost(@PathVariable("partnerId") int partnerId, HttpServletRequest request){
+        String token = request.getHeader("auth-token");
+        return postService.showAllPost(partnerId, token);
     }
 
     //Show a post

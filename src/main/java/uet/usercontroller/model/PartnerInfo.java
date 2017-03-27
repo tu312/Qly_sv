@@ -13,29 +13,17 @@ public class PartnerInfo {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @Column(name = "partnerName")
     private String partnerName;
-    @Column(name = "taxCode")
     private String taxCode;
-    @Column(name = "director")
     private String director;
-    @Column(name = "fieldWork")
     private String fieldWork;
-    @Column(name = "website")
     private String website;
-    @Column(name = "address")
     private String address;
-    @Column(name = "phone")
     private String phone;
-    @Column(name = "fax")
     private String fax;
-    @Column(name = "email")
     private String email;
-    @Column(name = "logo")
     private String logo;
-    @Column(name="averageRating")
     private Double averageRating;
-    @Column(name="totalRating")
     private Integer totalRating;
 
     public int getId() {

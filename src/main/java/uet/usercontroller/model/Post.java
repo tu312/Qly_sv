@@ -23,6 +23,7 @@ public class Post {
     private String describePost;
     private String image;
     private String status;
+    private Integer requiredNumber;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="post_hashtag", joinColumns = @JoinColumn(name="post_id",referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name="hashtag_id", referencedColumnName = "id"))
@@ -80,5 +81,13 @@ public class Post {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getRequiredNumber() {
+        return requiredNumber;
+    }
+
+    public void setRequiredNumber(Integer requiredNumber) {
+        this.requiredNumber = requiredNumber;
     }
 }

@@ -1,6 +1,5 @@
 package uet.usercontroller.model;
 
-import com.sun.xml.internal.ws.api.message.Packet;
 
 import javax.persistence.*;
 

@@ -2,6 +2,7 @@ package uet.usercontroller.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uet.usercontroller.DTO.ChangePasswordDTO;
 import uet.usercontroller.DTO.CreateStudentDTO;
 import uet.usercontroller.DTO.UserDTO;
 import uet.usercontroller.model.*;
@@ -33,6 +34,20 @@ public class UserService {
     PartnerInfoRepository partnerInfoRepository;
     @Autowired
     AdminNotificationRepository adminNotificationRepository;
+
+    private User login (UserDTO userDTO, User user){
+        if (userDTO.getPassword().equals(user.getPassword())) {
+            if (user.getToken() == null) {
+                user.setToken(UUID.randomUUID().toString());
+                user.setExpiryTime(new Date(System.currentTimeMillis() + 1000 * 60 * 15));
+            } else {
+                user.setExpiryTime(new Date(System.currentTimeMillis() + 1000 * 60 * 15));
+            }
+            return userRepository.save(user);
+        } else{
+            throw new NullPointerException("Wrong password.");
+        }
+    }
 
     //Show all user
     public List<User> getUsers(){
@@ -116,17 +131,7 @@ public class UserService {
     public User Login(UserDTO userDTO){
         User user = userRepository.findByUserName(userDTO.getUserName());
         if (user.getStatus().equals("A")) {
-            if (userDTO.getPassword().equals(user.getPassword())) {
-                if (user.getToken() == null) {
-                    user.setToken(UUID.randomUUID().toString());
-                    user.setExpiryTime(new Date(System.currentTimeMillis() + 1000 * 60 * 15));
-                } else {
-                    user.setExpiryTime(new Date(System.currentTimeMillis() + 1000 * 60 * 15));
-                }
-                return userRepository.save(user);
-            } else {
-                throw new NullPointerException("Wrong password.");
-            }
+            return this.login(userDTO, user);
         } else if (userDTO.getStatus().equals("D")) {
             throw new NullPointerException("Account was deactivated.");
         } else {
@@ -139,15 +144,7 @@ public class UserService {
     public User adminLogin (UserDTO userDTO){
         User user = userRepository.findByUserName(userDTO.getUserName());
         if ( user.getRole() == Role.ADMIN ) {
-            if (userDTO.getPassword().equals(user.getPassword())) {
-                if (user.getToken() == null) {
-                    user.setToken(UUID.randomUUID().toString());
-                    user.setExpiryTime(new Date(System.currentTimeMillis() + 1000 * 60 * 15));
-                } else {
-                    user.setExpiryTime(new Date(System.currentTimeMillis() + 1000 * 60 * 15));
-                }
-            }
-            return userRepository.save(user);
+            return this.login(userDTO, user);
         }
         else {
             throw new NullPointerException("Account is not an admin account.");
@@ -234,5 +231,16 @@ public class UserService {
                 adminNotificationRepository.save(adminNotification);
             }
         }
+    }
+
+    public User changePassword(ChangePasswordDTO changePasswordDTO, String token) throws Exception {
+        User user = userRepository.findByToken(token);
+        if(user.getPassword().equals(changePasswordDTO.getOldPassword())){
+            user.setPassword(changePasswordDTO.getNewPassword());
+            return userRepository.save(user);
+        } else{
+            throw new Exception("Old password is not equal!");
+        }
+
     }
 }
