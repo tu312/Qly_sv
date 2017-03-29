@@ -1,10 +1,13 @@
 package uet.usercontroller.controller;
 
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import uet.usercontroller.DTO.HashtagDTO;
 import uet.usercontroller.DTO.PostDTO;
+import uet.usercontroller.model.Hashtag;
 import uet.usercontroller.model.Post;
 import uet.usercontroller.model.Role;
 import uet.usercontroller.service.PostService;
@@ -48,7 +51,7 @@ public class PostController {
     //Create post
     @RequiredRoles({Role.VIP_PARTNER, Role.NORMAL_PARTNER})
     @RequestMapping(value="/partner/{partnerId}/post",method = RequestMethod.POST)
-    public Post createPost(@PathVariable("partnerId") int partnerId, @RequestBody PostDTO postDTO, HttpServletRequest request) throws IOException {
+    public Post createPost(@PathVariable("partnerId") int partnerId, @RequestBody PostDTO postDTO , HttpServletRequest request) throws IOException {
         String token = request.getHeader("auth-token");
         return postService.createPost(partnerId, postDTO, token);
     }
@@ -77,11 +80,11 @@ public class PostController {
         postService.deletePost(postId, token);
     }
 
-    //change post status
-    @RequiredRoles(Role.ADMIN)
-    @RequestMapping(value="post/{postId}/status", method = RequestMethod.PUT)
-    public Post changeStatus(@PathVariable("postId") int postId){
-        return postService.changeStatus(postId);
-    }
+//    //change post status
+//    @RequiredRoles(Role.ADMIN)
+//    @RequestMapping(value="post/{postId}/status", method = RequestMethod.PUT)
+//    public Post changeStatus(@PathVariable("postId") int postId){
+//        return postService.changeStatus(postId);
+//    }
 
 }

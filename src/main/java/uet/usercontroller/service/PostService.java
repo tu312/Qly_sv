@@ -5,9 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import uet.usercontroller.DTO.HashtagDTO;
 import uet.usercontroller.DTO.PostDTO;
 import uet.usercontroller.model.*;
-import uet.usercontroller.repository.FollowRepository;
+import uet.usercontroller.repository.HashtagRepository;
 import uet.usercontroller.repository.PartnerRepository;
 import uet.usercontroller.repository.PostRepository;
 import uet.usercontroller.repository.UserRepository;
@@ -16,6 +17,8 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,7 +36,7 @@ public class PostService {
     private PostRepository postRepository;
 
     @Autowired
-    private FollowRepository followRepository;
+    private HashtagRepository hashtagRepository;
 
     //show all post
     public Page<Post> getAllPosts(String token, Pageable pageable) {
@@ -80,14 +83,17 @@ public class PostService {
             post.setContent(postDTO.getContent());
             post.setDatePost(postDTO.getDatePost());
             post.setDescribePost(postDTO.getDescribePost());
-            post.setPartnerId(partnerId);
+            post.setPartner(partner);
             post.setRequiredNumber(postDTO.getRequiredNumber());
             if ( user.getRole() == Role.VIP_PARTNER){
                 post.setStatus("A");
             } else if (user.getRole() == Role.NORMAL_PARTNER){
                 post.setStatus("D");
             }
+            partner.getPost().add(post);
             postRepository.save(post);
+            List<HashtagDTO> hashtagDTOS = postDTO.getHashtagDTO();
+            createHashtag(post.getId(),hashtagDTOS);
             String username = user.getUserName();
 //            String postId = f()
             String pathname = "../Qly_SV_client/app/users_data/partner/" + username + "/post/";
@@ -109,19 +115,42 @@ public class PostService {
             osf.flush();
             String result = "http://localhost:8000/" + directoryName + fileName;
             post.setImage(result);
-           return postRepository.save(post);
+            return postRepository.save(post);
         }
         else{
             throw new NullPointerException("User doesn't match with Partner.");
         }
     }
 
+
+    public void createHashtag(int postId,List<HashtagDTO> List){
+        Post post = postRepository.findById(postId);
+        List<Hashtag> hashtags = (List<Hashtag>) hashtagRepository.findAll();
+        for(HashtagDTO hashtagDTO : List) {
+            String tag = hashtagDTO.getTag();
+            if(hashtagRepository.findByTag(tag) != null ){
+                for(Hashtag hashtag: hashtags){
+                    if(hashtag.getTag().equals(tag)){
+                        post.getHashtags().add(hashtagRepository.findByTag(tag));
+                        postRepository.save(post);
+                        break;
+                    }
+                }
+            } else {
+                Hashtag hashtag = new Hashtag();
+                hashtag.setTag(tag);
+                post.getHashtags().add(hashtag);
+                hashtagRepository.save(hashtag);
+            }
+        }
+    }
     //edit a post
     public Post editPost(int postId, PostDTO postDTO, String token){
         User user = userRepository.findByToken(token);
         Partner partner = user.getPartner();
         Post post = postRepository.findById(postId);
         Partner partner1 = partnerRepository.findByPostId(postId);
+        List<HashtagDTO> hashtagDTOS = postDTO.getHashtagDTO();
         if ( partner1.equals(partner)){
             if (postDTO.getContent()!=null){
                 post.setContent(postDTO.getContent());
@@ -132,8 +161,9 @@ public class PostService {
             if (postDTO.getDescribePost()!=null){
                 post.setDescribePost(postDTO.getDescribePost());
             }
-            if (postDTO.getRequiredNumber()!=null){
-                post.setRequiredNumber(postDTO.getRequiredNumber());
+            if( postDTO.getHashtagDTO()!=null){
+                post.getHashtags().clear();
+                createHashtag(postId, hashtagDTOS);
             }
             return postRepository.save(post);
         }
@@ -148,11 +178,9 @@ public class PostService {
         Post  post = postRepository.findOne(postId);
         Partner partner = partnerRepository.findByPostId(postId);
         if (user.getPartner().equals(partner)) {
+            post.getPartner().getPost().remove(post);
+            post.getHashtags().clear();
             postRepository.delete(post);
-            List<Follow> listFollow = (List<Follow>) followRepository.findByPostId(post.getId());
-            for (Follow follow : listFollow){
-                followRepository.delete(follow);
-            }
         }
         else {
             throw new NullPointerException("User doesn't match with Partner.");
@@ -169,7 +197,7 @@ public class PostService {
             String pathname = "../Qly_SV_client/app/users_data/tmp/";
             String directoryName = "users_data/tmp/";
             String fileName = username + "_" + ".jpg";
-            byte[] btDataFile = DatatypeConverter.parseBase64Binary(postDTO.getImage());
+            byte[] btDataFile = new sun.misc.BASE64Decoder().decodeBuffer(postDTO.getImage());
             File of = new File( pathname + fileName);
             FileOutputStream osf = new FileOutputStream(of);
             osf.write(btDataFile);
@@ -200,16 +228,5 @@ public class PostService {
         else{
             throw new NullPointerException("User doesn't match with Partner.");
         }
-    }
-
-    //change post status
-    public Post changeStatus(int postId){
-        Post post = postRepository.findOne(postId);
-        if(post.getStatus().equals("A")){
-            post.setStatus("D");
-        } else if(post.getStatus().equals("D")){
-            post.setStatus("A");
-        }
-        return postRepository.save(post);
     }
 }

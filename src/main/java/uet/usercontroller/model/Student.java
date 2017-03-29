@@ -28,10 +28,10 @@ public class Student {
     @OneToOne(cascade = CascadeType.ALL)
     private Comment comment;
 
-    @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<JobSkill> jobSkills;
 
-    @OneToMany(mappedBy = "studentId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Follow> follows;
 
     public Comment getComment() {

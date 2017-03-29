@@ -1,5 +1,7 @@
 package uet.usercontroller.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 /**
@@ -11,8 +13,14 @@ public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO )
     private int id;
-    private int studentId;
-    private int postId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "student")
+    @JsonIgnore
+    private Student student;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="post")
+    @JsonIgnore
+    private Post post;
     private String postTitle;
     private String studentName;
 
@@ -20,21 +28,20 @@ public class Follow {
 
     public void setId(int id) { this.id = id; }
 
-
-    public int getStudentId() {
-        return studentId;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
-    public int getPostId() {
-        return postId;
+    public Post getPost() {
+        return post;
     }
 
-    public void setPostId(int postId) {
-        this.postId = postId;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     public String getPostTitle() {

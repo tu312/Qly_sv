@@ -4,11 +4,13 @@ import uet.usercontroller.model.Partner;
 
 import java.sql.Blob;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Trung on 8/29/2016.
  */
 public class PostDTO {
+    private List<HashtagDTO> hashtagDTO;
     private int id;
     private String content;
     private Date datePost;
@@ -16,6 +18,14 @@ public class PostDTO {
     private String image;
     private String status;
     private Integer requiredNumber;
+
+    public List<HashtagDTO> getHashtagDTO() {
+        return hashtagDTO;
+    }
+
+    public void setHashtagDTO(List<HashtagDTO> hashtagDTO) {
+        this.hashtagDTO = hashtagDTO;
+    }
 
     public int getId() {
         return id;

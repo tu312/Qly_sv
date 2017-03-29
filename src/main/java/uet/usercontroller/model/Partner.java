@@ -20,16 +20,16 @@ public class Partner {
     @OneToOne(cascade = CascadeType.ALL)
     private PartnerInfo partnerInfo;
 
-    @OneToMany(mappedBy = "partnerId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL)
     private List<Post> post;
 
-    @OneToMany(mappedBy = "partnerId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL)
     private List<Internship> internships;
 
-    @OneToMany(mappedBy = "partnerId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL)
     private List<PartnerContact> partnerContacts;
 
-    @OneToMany(mappedBy = "partnerId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<Comment>();
 
     public int getId() {

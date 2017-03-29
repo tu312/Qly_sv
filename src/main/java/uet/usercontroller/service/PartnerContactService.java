@@ -49,12 +49,13 @@ public class PartnerContactService {
         if (user.getPartner().equals(partner)){
             PartnerContact partnerContact = new PartnerContact();
             partnerContact.setAddress(partnerContactDTO.getAddress());
-            partnerContact.setPartnerId(partnerId);
+            partnerContact.setPartner(partner);
             partnerContact.setContactName(partnerContactDTO.getContactName());
             partnerContact.setEmail(partnerContactDTO.getEmail());
             partnerContact.setSkype(partnerContactDTO.getSkype());
             partnerContact.setPhone(partnerContactDTO.getPhone());
             partnerContact.setAbout(partnerContactDTO.getAbout());
+            partner.getPartnerContacts().add(partnerContact);
             return partnerContactRepository.save(partnerContact);
         }
         else{

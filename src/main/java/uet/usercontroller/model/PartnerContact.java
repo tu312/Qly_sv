@@ -1,5 +1,7 @@
 package uet.usercontroller.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 /**
@@ -11,7 +13,10 @@ public class PartnerContact {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private int partnerId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="partner")
+    @JsonIgnore
+    private Partner partner;
     private String contactName;
     private String address;
     private String skype;
@@ -28,9 +33,13 @@ public class PartnerContact {
         this.id = id;
     }
 
-    public int getPartnerId() { return partnerId; }
+    public Partner getPartner() {
+        return partner;
+    }
 
-    public void setPartnerId(int partnerId) { this.partnerId = partnerId; }
+    public void setPartner(Partner partner) {
+        this.partner = partner;
+    }
 
     public String getContactName() {
         return contactName;

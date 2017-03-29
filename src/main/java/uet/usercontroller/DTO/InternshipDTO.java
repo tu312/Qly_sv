@@ -1,5 +1,7 @@
 package uet.usercontroller.DTO;
 
+import uet.usercontroller.model.Partner;
+
 import java.util.Date;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Date;
  */
 public class InternshipDTO {
     private int id;
-    private int partnerId;
+    private Partner partner;
     private String company;
     private Date startDate;
     private Date  endDate;
@@ -27,12 +29,12 @@ public class InternshipDTO {
         this.id = id;
     }
 
-    public int getPartnerId() {
-        return partnerId;
+    public Partner getPartner() {
+        return partner;
     }
 
-    public void setPartnerId(int partnerId) {
-        this.partnerId = partnerId;
+    public void setPartner(Partner partner) {
+        this.partner = partner;
     }
 
     public String getCompany() {

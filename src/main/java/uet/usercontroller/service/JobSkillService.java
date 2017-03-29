@@ -47,11 +47,12 @@ public class JobSkillService {
             jobSkill.setCompany(jobSkillDTO.getCompany());
             jobSkill.setSkill(jobSkillDTO.getSkill());
             jobSkill.setUpdateTime(jobSkillDTO.getUpdateTime());
-            jobSkill.setStudentId(studentId);
+            jobSkill.setStudent(student);
             jobSkill.setStartDate(jobSkillDTO.getStartDate());
             jobSkill.setEndDate(jobSkillDTO.getEndDate());
             jobSkill.setAbout(jobSkillDTO.getAbout());
             jobSkill.setRating(jobSkillDTO.getRating());
+            student.getJobSkills().add(jobSkill);
             return jobSkillRepository.save(jobSkill);
 
         }

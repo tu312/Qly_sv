@@ -1,10 +1,12 @@
 package uet.usercontroller.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import uet.usercontroller.DTO.HashtagDTO;
+
 import javax.persistence.*;
-import java.util.Date;
+import java.util.*;
 import java.sql.Blob;
-import java.util.List;
-import java.util.Set;
 import javax.persistence.Lob;
 
 /**
@@ -17,17 +19,23 @@ public class Post {
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private int partnerId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="partner")
+    @JsonIgnore
+    private Partner partner;
     @Column(name="content", length = 2800000)
     private String content;
     private String describePost;
     private String image;
     private String status;
     private Integer requiredNumber;
-
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Follow> follows = new ArrayList<Follow>();
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="post_hashtag", joinColumns = @JoinColumn(name="post_id",referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name="hashtag_id", referencedColumnName = "id"))
-    private List<Hashtag> hashtags;
+    @JoinTable(name="post_hashtag",
+            joinColumns = @JoinColumn(name="post_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name="hashtag_id", referencedColumnName = "id"))
+    private List<Hashtag> hashtags = new ArrayList<Hashtag>();
 
     public List<Hashtag> getHashtags() {
         return hashtags;
@@ -45,9 +53,13 @@ public class Post {
         this.id = id;
     }
 
-    public int getPartnerId() { return partnerId; }
+    public Partner getPartner() {
+        return partner;
+    }
 
-    public void setPartnerId(int partnerId) { this.partnerId = partnerId; }
+    public void setPartner(Partner partner) {
+        this.partner = partner;
+    }
 
     public String getContent() { return content; }
 
@@ -89,5 +101,13 @@ public class Post {
 
     public void setRequiredNumber(Integer requiredNumber) {
         this.requiredNumber = requiredNumber;
+    }
+
+    public List<Follow> getFollows() {
+        return follows;
+    }
+
+    public void setFollows(List<Follow> follows) {
+        this.follows = follows;
     }
 }

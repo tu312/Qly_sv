@@ -1,5 +1,7 @@
 package uet.usercontroller.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 /**
@@ -11,7 +13,10 @@ public class JobSkill{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO )
     private int id;
-    private int studentId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="student")
+    @JsonIgnore
+    private Student student;
     private String skill;
     private String company;
     private Date updateTime;
@@ -28,12 +33,12 @@ public class JobSkill{
         this.id = id;
     }
 
-    public int getStudentId() {
-        return studentId;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public String getSkill() {

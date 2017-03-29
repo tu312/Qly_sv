@@ -50,13 +50,16 @@ public class FollowService {
     public void createFollow(int postId, int studentId, String token, FollowDTO followDTO) {
         User user = userRepository.findByToken(token);
         Student student = user.getStudent();
+        Post post = postRepository.findById(postId);
         if(student.getId() == studentId){
             if (followRepository.findByStudentIdAndPostId(studentId, postId) == null){
                 Follow follow = new Follow();
-                follow.setPostId(postId);
-                follow.setStudentId(studentId);
+                follow.setPost(post);
+                follow.setStudent(student);
                 follow.setPostTitle(followDTO.getPostTitle());
                 follow.setStudentName(followDTO.getStudentName());
+                student.getFollows().add(follow);
+                post.getFollows().add(follow);
                 followRepository.save(follow);
             } else {
                 throw new NullPointerException("Post followed");

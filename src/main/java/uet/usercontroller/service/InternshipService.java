@@ -27,10 +27,10 @@ public class InternshipService {
     @Autowired
     private AdminNotificationRepository adminNotificationRepository;
 
-    private Internship createInternship(InternshipDTO internshipDTO){
+    private Internship createInternship(Partner partner,InternshipDTO internshipDTO){
         Internship internship = new Internship();
         internship.setCompany(internshipDTO.getCompany());
-        internship.setPartnerId(internshipDTO.getPartnerId());
+        internship.setPartner(partner);
         internship.setEndDate(internshipDTO.getEndDate());
         internship.setStartDate(internshipDTO.getStartDate());
         internship.setSupervisor(internshipDTO.getSupervisor());
@@ -72,10 +72,12 @@ public class InternshipService {
     public Internship createIntern(int studentId,int partnerId,InternshipDTO internshipDTO,String token) {
         User user = userRepository.findByToken(token);
         Student student = studentRepository.findOne(studentId);
+        Partner partner = partnerRepository.findById(partnerId);
         if(user.getRole().equals(Role.ADMIN)){
             if(student.getInternship()==null) {
-                Internship internship = this.createInternship(internshipDTO);
+                Internship internship = this.createInternship(partner,internshipDTO);
                 student.setInternship(internship);
+                partner.getInternships().add(internship);
                 return internshipRepository.save(internship);
             }
             else {
@@ -92,7 +94,6 @@ public class InternshipService {
         User user = userRepository.findByToken(token);
         if(user.getRole().equals(Role.ADMIN)) {
             Internship internship = internshipRepository.findOne(internId);
-            internship.setPartnerId(internshipDTO.getPartnerId());
             internship.setCompany(internshipDTO.getCompany());
             internship.setStartDate(internshipDTO.getStartDate());
             internship.setEndDate(internshipDTO.getEndDate());
@@ -135,9 +136,9 @@ public class InternshipService {
                 Student student = user_.getStudent();
                 if( student.getInternship() == null){
                     internshipDTO.setStudentId(student.getId());
-                    internshipDTO.setPartnerId((partner.getId()));
-                    Internship internship = this.createInternship(internshipDTO);
+                    Internship internship = this.createInternship(partner,internshipDTO);
                     student.setInternship(internship);
+                    partner.getInternships().add(internship);
                     internshipRepository.save(internship);
                 } else{
                     AdminNotification adminNotification = new AdminNotification();

@@ -1,5 +1,7 @@
 package uet.usercontroller.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 /**
@@ -14,7 +16,10 @@ public class Comment {
     private Integer rating;
     private String content;
     private Integer filter;
-    private Integer partnerId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="partner")
+    @JsonIgnore
+    private Partner partner;
 
     public Integer getId() {
         return id;
@@ -40,12 +45,12 @@ public class Comment {
         this.content = content;
     }
 
-    public Integer getPartnerId() {
-        return partnerId;
+    public Partner getPartner() {
+        return partner;
     }
 
-    public void setPartnerId(Integer partnerId) {
-        this.partnerId = partnerId;
+    public void setPartner(Partner partner) {
+        this.partner = partner;
     }
 
     public Integer getFilter() {

@@ -53,16 +53,18 @@ public class CommentService {
     public Comment writeComment(int partnerId, CommentDTO commentDTO, String token){
         User user = userRepository.findByToken(token);
         Student student = user.getStudent();
+        Partner partner = partnerRepository.findById(partnerId);
         if (student.getComment() == null ){
             if (commentDTO.getRating() != null && commentDTO.getContent()!=null) {
                 if (commentDTO.getRating() > 0 && commentDTO.getRating() <= 5) {
                     Comment comment = new Comment();
                     comment.setContent(commentDTO.getContent());
                     comment.setRating(commentDTO.getRating());
-                    comment.setPartnerId(partnerId);
+                    comment.setPartner(partner);
                     student.setComment(comment);
-                    Partner partner = partnerRepository.findOne(partnerId);
-                    PartnerInfo partnerInfo = partner.getPartnerInfo();
+                    partner.getComments().add(comment);
+                    Partner partner1 = partnerRepository.findOne(partnerId);
+                    PartnerInfo partnerInfo = partner1.getPartnerInfo();
                     if (partnerInfo.getTotalRating() == null) {
                         partnerInfo.setTotalRating(1);
                     } else {
